@@ -10,7 +10,7 @@ SRC := src/Test.cpp \
 OBJ := ${SRC:.cpp=.o}
 
 CC		:= g++
-CFLAGS	:= -Werror -Wall -Wextra -ggdb -I./include
+CFLAGS	:= -Werror -Wall -Wextra -ggdb -I./include -std=c++17
 
 NAME	:= libtestframework.a
 
@@ -22,7 +22,7 @@ lib: ${OBJ}
 	ar rcs ${NAME} ${OBJ}
 
 test: all
-	${CC} ${CFLAGS} -o $@ test.cpp -L. -ltestframework -lncurses
+	${CC} ${CFLAGS} -I./include -o $@ test.cpp -L. -ltestframework -lncurses
 
 %.o: %.cpp
 	${CC} ${CFLAGS} -c $< -o $@
