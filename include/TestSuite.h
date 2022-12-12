@@ -59,5 +59,8 @@ class TestSuite: public Test
 		 * @return		true if each test have been executed, false else
 		 */
 		bool		executed() const override;
+
+		size_t		ntests() const;
+		size_t		nexecuted() const;
 };
 #endif

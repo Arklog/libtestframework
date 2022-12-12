@@ -39,3 +39,10 @@ void	MainWindow::display()
 
 	refresh();
 }
+
+void	MainWindow::display_loop()
+{
+	while (TestManager::get()->run_one())
+		this->display(), getch();
+	getch();
+}

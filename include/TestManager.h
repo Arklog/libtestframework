@@ -53,8 +53,10 @@ class TestManager
 
 		/**
 		 * Execute one test
+		 *
+		 * @return		true if a test have been run, false else
 		 */
-		void	run_one();
+		bool	run_one();
 };
 
 #endif

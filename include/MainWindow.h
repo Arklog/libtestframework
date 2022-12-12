@@ -3,6 +3,7 @@
 
 # include "TestWindow.h"
 # include "ErrorWindow.h"
+# include "TestManager.h"
 
 class MainWindow: public Window
 {
@@ -15,6 +16,7 @@ class MainWindow: public Window
 		virtual ~MainWindow();
 
 		void	display() override;
+		void	display_loop();
 };
 
 #endif

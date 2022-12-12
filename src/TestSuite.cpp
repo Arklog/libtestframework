@@ -40,11 +40,16 @@ std::vector<std::string>	TestSuite::to_string() const
 	std::vector<std::string>	vec;
 	std::string					str;
 
-	str = std::string("");
-	str.append(
-			this->name()).append(
-			std::string(": []\n").insert(3, 
-				(this->executed()) ? (this->result()) ? "OK" : "KO" : "*"));
+	str = std::string(this->_name);
+	str += ": ";
+	if (!this->executed())
+		str += std::string("[" + 
+				std::to_string(this->nexecuted()) +
+				"/" +
+				std::to_string(this->_tests.size()) +
+				"]\n");
+	else
+		str += this->result() ? "[OK]\n" : "[KO]\n";
 	vec.push_back(str);
 	str = std::string("");
 	for (Test *iter: this->_tests)
@@ -83,4 +88,19 @@ bool	TestSuite::executed() const
 		if (!i->executed())
 			return (false);
 	return (true);
+}
+
+size_t	TestSuite::ntests() const
+{
+	return this->_tests.size();
+}
+
+size_t	TestSuite::nexecuted() const
+{
+	size_t	i;
+
+	i = 0;
+	for (auto iter: this->_tests)
+		i += iter->executed();
+	return (i);
 }

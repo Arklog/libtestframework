@@ -47,12 +47,14 @@ std::vector<Test *>	TestManager::get_executed(bool all, bool success)
 	return (vec);
 }
 
-void	TestManager::run_one()
+bool	TestManager::run_one()
 {
 	auto	iter = this->_vec.begin();
 
 	while (iter != this->_vec.end() && (*iter)->executed())
 		++iter;
 	if (iter != this->_vec.end())
-		(*iter)->run();
+		return ((*iter)->run(), true);
+	else
+		return (false);
 }
