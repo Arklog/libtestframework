@@ -1,11 +1,11 @@
-#ifndef FUNCGENERATOR_H
-# define FUNCGENERATOR_H
+#ifndef GENERATORFUNC_H
+# define GENERATORFUNC_H
 
 # include <functional>
 # include "Generator.h"
 
 template <typename T>
-class FuncGenerator: public Generator<T>
+class GeneratorFunc: public Generator<T>
 {
 	private:
 		std::function<T(bool)>		_fun;
@@ -22,8 +22,8 @@ class FuncGenerator: public Generator<T>
 		 * @param max	the maximum number of run of a generator function, if this
 		 * 				number is reached the function will be reset.
 		 */
-		FuncGenerator<T>(std::function<T(bool)> f, std::size_t max);
-		~FuncGenerator<T>();
+		GeneratorFunc<T>(std::function<T(bool)> f, std::size_t max);
+		~GeneratorFunc<T>();
 
 		T			generate() override;
 		std::size_t	size() const override;
@@ -33,18 +33,18 @@ class FuncGenerator: public Generator<T>
 };
 
 template <typename T>
-FuncGenerator<T>::FuncGenerator(std::function<T(bool)> f, std::size_t max):
+GeneratorFunc<T>::GeneratorFunc(std::function<T(bool)> f, std::size_t max):
 	_fun(f), _size(max)
 {
 }
 
 template <typename T>
-FuncGenerator<T>::~FuncGenerator()
+GeneratorFunc<T>::~GeneratorFunc()
 {
 }
 
 template <typename T>
-T FuncGenerator<T>::generate()
+T GeneratorFunc<T>::generate()
 {
 	if (++(this->_i) >= this->_size)
 		this->_fun(true); //reset generator
@@ -52,25 +52,25 @@ T FuncGenerator<T>::generate()
 }
 
 template <typename T>
-bool	FuncGenerator<T>::finished() const
+bool	GeneratorFunc<T>::finished() const
 {
 	return (this->_i == this->_size);
 }
 
 template <typename T>
-std::size_t	FuncGenerator<T>::size() const
+std::size_t	GeneratorFunc<T>::size() const
 {
 	return (this->_size);
 }
 
 template <typename T>
-std::size_t	FuncGenerator<T>::current() const
+std::size_t	GeneratorFunc<T>::current() const
 {
 	return (this->_i);
 }
 
 template <typename T>
-void	FuncGenerator<T>::reset()
+void	GeneratorFunc<T>::reset()
 {
 	this->_fun(true);
 	this->_i = 0;

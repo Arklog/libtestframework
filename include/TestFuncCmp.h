@@ -5,6 +5,7 @@
 # include <iostream>
 # include <tuple>
 # include <type_traits>
+# include <string>
 # include "Test.h"
 
 template<typename RetType, typename ...Types>
