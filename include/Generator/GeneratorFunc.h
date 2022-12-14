@@ -2,7 +2,7 @@
 #define GENERATORFUNC_H
 
 #include <functional>
-#include "Generator.h"
+#include "Generator/Generator.h"
 
 template <typename T>
 class GeneratorFunc : public Generator<T>

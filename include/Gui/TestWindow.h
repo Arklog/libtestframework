@@ -1,8 +1,8 @@
 #ifndef TESTWINDOW_H
 # define TESTWINDOW_H
 
-# include "Window.h"
-# include "TestManager.h"
+# include "Gui/Window.h"
+# include "Test/TestManager.h"
 
 class TestWindow: public Window
 {

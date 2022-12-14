@@ -1,7 +1,7 @@
 #ifndef ERRORWINDOW_H
 # define ERRORWINDOW_H
 
-# include "Window.h"
+# include "Gui/Window.h"
 
 class ErrorWindow: public Window
 {

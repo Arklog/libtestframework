@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "Gui/Window.h"
 
 Window::Window(WINDOW *window): _window(window), _border('#')
 {

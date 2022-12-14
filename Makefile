@@ -1,11 +1,11 @@
-SRC := src/Test.cpp \
-	   src/TestFuncCmp.cpp \
-	   src/TestManager.cpp \
-	   src/TestSuite.cpp \
-	   src/Window.cpp \
-	   src/MainWindow.cpp \
-	   src/TestWindow.cpp \
-	   src/ErrorWindow.cpp
+SRC := src/Test/Test.cpp \
+	   src/Test/TestFuncCmp.cpp \
+	   src/Test/TestManager.cpp \
+	   src/Test/TestSuite.cpp \
+	   src/Gui/Window.cpp \
+	   src/Gui/MainWindow.cpp \
+	   src/Gui/TestWindow.cpp \
+	   src/Gui/ErrorWindow.cpp
 
 OBJ := ${SRC:.cpp=.o}
 

@@ -1,9 +1,8 @@
 #ifndef MAINWINDOW_H
 # define MAINWINDOW_H
 
-# include "TestWindow.h"
-# include "ErrorWindow.h"
-# include "TestManager.h"
+# include "Gui/TestWindow.h"
+# include "Gui/ErrorWindow.h"
 
 class MainWindow: public Window
 {

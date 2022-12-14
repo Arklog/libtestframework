@@ -1,8 +1,8 @@
 #ifndef TESTFUNCCMPGEN_H
 #define TESTFUNCCMPGEN_H
 
-#include "Test.h"
-#include "TestFuncCmp.h"
+#include "Test/Test.h"
+#include "Test/TestFuncCmp.h"
 
 template <typename T>
 class Generator;

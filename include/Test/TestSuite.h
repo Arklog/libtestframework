@@ -4,7 +4,7 @@
 # include <vector>
 # include <string>
 # include <algorithm>
-# include "Test.h"
+# include "Test/Test.h"
 
 class TestSuite: public Test
 {

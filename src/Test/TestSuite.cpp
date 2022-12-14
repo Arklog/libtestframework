@@ -1,4 +1,4 @@
-#include "TestSuite.h"
+#include "Test/TestSuite.h"
 
 TestSuite::TestSuite(std::string name): _name(name), _tests(std::vector<Test *>())
 {

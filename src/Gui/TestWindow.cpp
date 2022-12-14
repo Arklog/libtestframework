@@ -1,4 +1,4 @@
-#include "TestWindow.h"
+#include "Gui/TestWindow.h"
 
 TestWindow::TestWindow(WINDOW *window): Window(window)
 {

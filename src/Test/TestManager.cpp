@@ -1,4 +1,4 @@
-#include "TestManager.h"
+#include "Test/TestManager.h"
 
 std::shared_ptr<TestManager> TestManager::_current =
 	std::shared_ptr<TestManager>(nullptr);

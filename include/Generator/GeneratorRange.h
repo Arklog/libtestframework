@@ -1,7 +1,7 @@
 #ifndef GENERATORRANGE_H
 #define GENERATORRANGE_H
 
-#include "Generator.h"
+#include "Generator/Generator.h"
 
 template <typename T>
 class GeneratorRange: public Generator<T>

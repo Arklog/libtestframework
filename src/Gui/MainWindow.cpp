@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+#include "Gui/MainWindow.h"
 
 MainWindow::MainWindow(): Window(initscr()), _err(NULL), _tests(NULL)
 {

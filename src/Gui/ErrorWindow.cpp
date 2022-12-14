@@ -1,4 +1,4 @@
-#include "ErrorWindow.h"
+#include "Gui/ErrorWindow.h"
 
 ErrorWindow::ErrorWindow(WINDOW *window): Window(window)
 {
