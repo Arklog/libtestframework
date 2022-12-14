@@ -4,7 +4,7 @@
 #include "Generator.h"
 
 template <typename T>
-class GeneratorRange : public Generator
+class GeneratorRange: public Generator<T>
 {
 private:
 	T _min;

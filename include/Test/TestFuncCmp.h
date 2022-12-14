@@ -23,20 +23,32 @@ public:
 	TestFuncCmp<RetType, Types...>(std::function<RetType(Types...)> f1,
 								   std::function<RetType(Types...)> f2,
 								   Types... args);
+	TestFuncCmp<RetType, Types...>(std::function<RetType(Types...)> f1,
+								   std::function<RetType(Types...)> f2,
+								   std::tuple<Types...> args);
 	~TestFuncCmp();
 
 	void run() override;
 	std::string get_error() const override;
+	void set_args(std::tuple<Types...> args);
 };
 
 template <typename RetType, typename... Types>
 TestFuncCmp<RetType, Types...>::TestFuncCmp(
 	std::function<RetType(Types...)> f1,
 	std::function<RetType(Types...)> f2,
-	Types... args) : _f1(f1), _f2(f2)
+	Types... args) : Test(), _f1(f1), _f2(f2)
 {
 	std::tuple<Types...> t = std::make_tuple(args...);
 	this->_args = t;
+}
+
+template <typename RetType, typename... Types>
+TestFuncCmp<RetType, Types...>::TestFuncCmp(
+	std::function<RetType(Types...)> f1,
+	std::function<RetType(Types...)> f2,
+	std::tuple<Types...> args) : Test(), _f1(f1), _f2(f2), _args(args)
+{
 }
 
 template <typename RetType, typename... Types>
@@ -91,4 +103,11 @@ std::string TestFuncCmp<RetType, Types...>::get_error() const
 	return ret;
 }
 
+template <typename RetType, typename... Types>
+void TestFuncCmp<RetType, Types...>::set_args(std::tuple<Types...> args)
+{
+	this->_args = args;
+	this->_result = false;
+	this->_exec = false;
+}
 #endif
