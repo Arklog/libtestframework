@@ -45,13 +45,7 @@ void	MainWindow::display_loop()
 	#ifdef MULTITHREAD
 	auto l = [] () {
 		auto m = TestManager::get();
-		while (!m->finished())
-		{
-			#ifdef DEBUG
-			std::cout << "running" << std::endl;
-			#endif
-			m->run_one();
-		}
+		m->run_all();
 	};
 	std::thread th(l);
 	#endif
