@@ -5,24 +5,34 @@ SRC := src/Test/Test.cpp \
 	   src/Gui/Window.cpp \
 	   src/Gui/MainWindow.cpp \
 	   src/Gui/TestWindow.cpp \
-	   src/Gui/ErrorWindow.cpp
+	   src/Gui/ErrorWindow.cpp \
+	   src/Utils/Functions.cpp
 
 OBJ := ${SRC:.cpp=.o}
 
-CC		:= g++
-CFLAGS	:= -Werror -Wall -Wextra -ggdb -I./include -std=c++17
+INC := -I. \
+		-I./testframework 
+
+CC		:= g+Funtions
+CFLAGS	:=	-Werror \
+			-Wall \
+			-Wextra \
+			-ggdb \
+			${INC} \
+			-std=c++17 \
+			#-DDEBUG
 
 NAME	:= libtestframework.a
 
-.PHONY: all re clean
+.PHONY: all re clean test
 
 all: lib
 
 lib: ${OBJ}
 	ar rcs ${NAME} ${OBJ}
 
-test: all
-	${CC} ${CFLAGS} -I./include -o $@ test.cpp -L. -ltestframework -lncurses
+test: test.o all
+	${CC} ${CFLAGS} ${INC} -o $@ test.o ${OBJ} -L. -ltestframework -lncurses
 
 %.o: %.cpp
 	${CC} ${CFLAGS} -c $< -o $@
@@ -30,4 +40,4 @@ test: all
 re: | clean all
 
 clean:
-	@rm -rf ${OBJ} ${NAME}
+	@rm -rf ${OBJ} ${NAME} test

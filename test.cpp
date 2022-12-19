@@ -1,11 +1,10 @@
 #include <cstdio>
 #include <iostream>
-#include "TestFuncCmp.h"
-#include "TestFuncCmpGen.h"
-#include "TestSuite.h"
-#include "TestManager.h"
-#include "MainWindow.h"
-#include "GeneratorRange.h"
+#include "Test/TestFuncCmpGen.h"
+#include "Test/TestSuite.h"
+#include "Test/TestManager.h"
+#include "Gui/MainWindow.h"
+#include "Generator/GeneratorRange.h"
 #include <cctype>
 
 int main()
@@ -15,17 +14,23 @@ int main()
 	Test				*t;
 
 	// Test TestFuncCmp
+	suite = new TestSuite("printf");
 	for (int i = 0; i < 10; ++i)
 	{
-		t = new TestFuncCmp<int, const char *, int>(printf, printf, "%d", 5);
-		v.push_back(t);
+		t = new TestFuncCmp<int, const char *, int>(printf, printf, "printf: %d\n", 5);
+		suite->add_test(t);
 	}
-	suite = new TestSuite("printf", v);
 	TestManager::get()->add_test(suite);
 
+
 	// Test TestFuncCmpGen
-	TestFuncCmpGen<int, int> test = TestFuncCmpGen<int, int>(std::isprint, std::isprint, 
-		new GeneratorRange<int>(0, 255));
+	std::function<int(int)> f = [](int i) {
+		return std::isprint(i);
+	};
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
 
 	MainWindow w = MainWindow();
 	w.display_loop();

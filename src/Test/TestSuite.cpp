@@ -53,7 +53,7 @@ std::vector<std::string>	TestSuite::to_string() const
 	vec.push_back(str);
 	str = std::string("");
 	for (Test *iter: this->_tests)
-		str.append(iter->to_string().at(0) + " ");
+		str.append((!iter->to_string().empty()) ? iter->to_string().at(0) + " " : "");
 	vec.push_back(str);
 	return (vec);
 }
@@ -103,4 +103,9 @@ size_t	TestSuite::nexecuted() const
 	for (auto iter: this->_tests)
 		i += iter->executed();
 	return (i);
+}
+
+void TestSuite::add_test(Test * t)
+{
+	this->_tests.push_back(t);
 }

@@ -11,7 +11,7 @@ protected:
 	T _cvalue;
 public:
 	Generator<T>();
-	~Generator<T>();
+	virtual ~Generator<T>();
 
 	/**
 	 * Check if a generator have reached the end of its generations
@@ -28,6 +28,16 @@ public:
 	 * @return		the newly generated value
 	 */
 	virtual T generate() = 0;
+
+	/**
+	 * @brief Return the nth element of the generator, the generator will
+	 * be reset after this call
+	 * 
+	 * @param n index of the element
+	 * 
+	 * @return 
+	 */
+	virtual T get_nth(std::size_t n);
 
 	/**
 	 * The maximum number of generation of this generator
@@ -69,6 +79,20 @@ Generator<T>::~Generator() {}
 template <typename T>
 T Generator<T>::value() const
 {
-	return (this->_current());
+	return (this->_cvalue);
+}
+
+template <typename T>
+T Generator<T>::get_nth(std::size_t n)
+{
+	std::size_t i;
+	T retv;
+
+	i = 0;
+	while (i++ < n)
+		this->generate();
+	retv = this->current();
+	this->reset();
+	return (retv);
 }
 #endif

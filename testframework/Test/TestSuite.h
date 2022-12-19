@@ -62,5 +62,6 @@ class TestSuite: public Test
 
 		size_t		ntests() const;
 		size_t		nexecuted() const;
+		void		add_test(Test *t);
 };
 #endif

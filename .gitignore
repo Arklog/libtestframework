@@ -1,0 +1,6 @@
+*.o
+.ccls-cache
+Session.vim
+c_cpp_properties.json
+settings.json
+.gdb_history

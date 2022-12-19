@@ -24,6 +24,10 @@ void	TestWindow::display()
 			this->set_x(3);
 			wprintw(this->get(), "%s", str.c_str());
 		}
+		if (vec.size() > 1)
+			this->set_y(this->get_y() + vec.size());
+		else
+			this->set_y(this->get_y() + 1);
 	}
 
 	this->draw_border();

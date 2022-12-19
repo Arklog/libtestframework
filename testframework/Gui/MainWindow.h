@@ -1,6 +1,10 @@
 #ifndef MAINWINDOW_H
 # define MAINWINDOW_H
 
+#ifdef DEBUG_LOG
+#include <iostream>
+#endif
+
 # include "Gui/TestWindow.h"
 # include "Gui/ErrorWindow.h"
 

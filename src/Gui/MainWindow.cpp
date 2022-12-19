@@ -42,7 +42,12 @@ void	MainWindow::display()
 
 void	MainWindow::display_loop()
 {
+	#ifndef DEBUG
 	while (TestManager::get()->run_one())
 		this->display(), getch();
+	#else
+	while (TestManager::get()->run_one())
+		continue;
+	#endif
 	getch();
 }

@@ -6,7 +6,8 @@
 #include <tuple>
 #include <type_traits>
 #include <string>
-#include "Test/Test.h"
+#include "Test.h"
+#include "Utils/Functions.h"
 
 template <typename RetType, typename... Types>
 class TestFuncCmp : public Test
@@ -63,18 +64,6 @@ void TestFuncCmp<RetType, Types...>::run()
 	this->_ret2 = std::apply(this->_f2, this->_args);
 	this->_exec = true;
 	this->_result = this->_ret1 == this->_ret2;
-}
-
-template <typename T>
-std::string toString(T i)
-{
-	return (std::to_string(i));
-}
-
-template <>
-std::string toString<const char *>(const char *i)
-{
-	return (std::string(i));
 }
 
 template <typename Tuple, std::size_t... I>
