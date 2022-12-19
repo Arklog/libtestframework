@@ -1,4 +1,6 @@
 *.o
+libtestframework.a
+test
 .ccls-cache
 Session.vim
 c_cpp_properties.json
