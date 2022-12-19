@@ -42,12 +42,44 @@ void	MainWindow::display()
 
 void	MainWindow::display_loop()
 {
+	#ifdef MULTITHREAD
+	auto l = [] () {
+		auto m = TestManager::get();
+		while (!m->finished())
+		{
+			#ifdef DEBUG
+			std::cout << "running" << std::endl;
+			#endif
+			m->run_one();
+		}
+	};
+	std::thread th(l);
+	#endif
 	#ifndef DEBUG
+
+	#ifdef MULTITHREAD
+	this->display();
+	while (!th.joinable())
+		this->display();
+	#else
 	while (TestManager::get()->run_one())
-		this->display(), getch();
+		this->display();
+	#endif
+
+	#else
+
+	#ifdef MULTITHREAD
+	while (th.joinable())
+		continue;
+	this->display();
 	#else
 	while (TestManager::get()->run_one())
 		continue;
+	#endif
+
+	#endif
+	#ifdef MULTITHREAD
+	th.join();
 	#endif
 	getch();
 	this->display();

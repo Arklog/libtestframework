@@ -1,4 +1,5 @@
 #include "Gui/TestWindow.h"
+#include "TestWindow.h"
 
 TestWindow::TestWindow(WINDOW *window): Window(window, '#', 3, 2)
 {

@@ -4,3 +4,5 @@ clang++
 -Wextra
 -Werror
 -I./testframework
+-DDEBUG
+-DMULTITHREAD

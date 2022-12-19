@@ -14,13 +14,14 @@ INC := -I. \
 		-I./testframework 
 
 CC		:= g++
-CFLAGS	:=	-Werror \
+CFLAGS	=	-Werror \
 			-Wall \
 			-Wextra \
 			-ggdb \
 			${INC} \
 			-std=c++17 \
-			#-DDEBUG
+			${DEFINES}
+DEFINES := -DMULTITHREAD #-DDEBUG
 
 NAME	:= libtestframework.a
 

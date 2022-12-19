@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 # define MAINWINDOW_H
 
-#ifdef DEBUG_LOG
+#ifdef DEBUG
 #include <iostream>
 #endif
 
