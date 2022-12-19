@@ -1,9 +1,10 @@
 #include "Test/TestManager.h"
+#include "TestManager.h"
 
 std::shared_ptr<TestManager> TestManager::_current =
 	std::shared_ptr<TestManager>(nullptr);
 
-TestManager::TestManager(): _vec(std::vector<Test *>())
+TestManager::TestManager(): _vec(std::vector<Test *>()), _iter(this->_vec.begin())
 {
 }
 
@@ -25,6 +26,7 @@ std::shared_ptr<TestManager> TestManager::get()
 void	TestManager::add_test(Test *t)
 {
 	this->_vec.push_back(t);
+	this->_iter = this->_vec.begin();
 }
 
 std::vector<Test *> TestManager::get_tests()
@@ -49,12 +51,17 @@ std::vector<Test *>	TestManager::get_executed(bool all, bool success)
 
 bool	TestManager::run_one()
 {
-	auto	iter = this->_vec.begin();
+	if (this->_iter != this->_vec.end())
+	{
+		(*(this->_iter))->run();
+		if ((*this->_iter)->executed())
+			(this->_iter)++;
+		return (true);
+	}	
+	return (false);
+}
 
-	while (iter != this->_vec.end() && (*iter)->executed())
-		++iter;
-	if (iter != this->_vec.end())
-		return ((*iter)->run(), true);
-	else
-		return (false);
+bool TestManager::finished() const
+{
+	return (this->_iter == this->_vec.end());
 }

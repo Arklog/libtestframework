@@ -50,4 +50,5 @@ void	MainWindow::display_loop()
 		continue;
 	#endif
 	getch();
+	this->display();
 }

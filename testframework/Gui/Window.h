@@ -97,7 +97,10 @@ public:
   int get_maxx();
   int get_maxy();
 
-  void print(const char *str, ...);
+  int get_padx() const;
+  int get_pady() const;
+
+  void print(const char *str, bool nl = true);
 };
 
 #endif

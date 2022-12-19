@@ -13,7 +13,6 @@ void	TestWindow::display()
 	this->clear();
 	this->reset_cursor();
 
-	this->set_y(this->get_y() + 2);
 	std::vector<Test *>	vec = TestManager::get()->get_tests();
 	for (const Test *iter: vec)
 	{

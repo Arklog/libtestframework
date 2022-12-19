@@ -5,6 +5,7 @@
 #include <iostream>
 #endif
 
+# include <thread>
 # include "Gui/TestWindow.h"
 # include "Gui/ErrorWindow.h"
 

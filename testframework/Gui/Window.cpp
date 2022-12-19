@@ -12,8 +12,8 @@ Window::~Window() { delwin(this->_window); }
 void Window::reset_cursor() {
   if (!this->get())
     return;
-  this->get()->_curx = 0;
-  this->get()->_cury = 0;
+  this->get()->_curx = 0 + this->get_padx();
+  this->get()->_cury = 0 + this->get_pady();
 }
 
 void Window::clear() {
@@ -54,7 +54,7 @@ void Window::set_x(int x) {
   if (!this->get())
     return;
   if (x <= this->get_maxx())
-    this->get()->_curx = (short)x;
+    this->get()->_curx = (short)x + (short)this->get_padx();
 }
 
 int Window::get_y() {
@@ -68,7 +68,7 @@ void Window::set_y(int y) {
   if (!this->get())
     return;
   if (y <= this->get_maxy())
-    this->get()->_cury = (short)y;
+    this->get()->_cury = (short)y + (short)this->get_pady();
 }
 
 int Window::get_maxx() {
@@ -83,4 +83,21 @@ int Window::get_maxy() {
     return (getmaxy(this->get()));
   else
 	return (0);
+}
+
+void Window::print(const char *str, bool nl)
+{
+	this->set_x(this->get_padx());
+	wprintw(this->get(), "%s", str);
+	this->set_y(this->get_y() + (int)nl);
+}
+
+int Window::get_padx() const
+{
+	return (this->_padx);
+}
+
+int Window::get_pady() const
+{
+	return (this->_pady);
 }
