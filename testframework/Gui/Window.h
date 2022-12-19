@@ -96,6 +96,8 @@ public:
 
   int get_maxx();
   int get_maxy();
+
+  void print(const char *str, ...);
 };
 
 #endif

@@ -1,19 +1,19 @@
-SRC := src/Test/Test.cpp \
-	   src/Test/TestFuncCmp.cpp \
-	   src/Test/TestManager.cpp \
-	   src/Test/TestSuite.cpp \
-	   src/Gui/Window.cpp \
-	   src/Gui/MainWindow.cpp \
-	   src/Gui/TestWindow.cpp \
-	   src/Gui/ErrorWindow.cpp \
-	   src/Utils/Functions.cpp
+SRC := testframework/Test/Test.cpp \
+	   testframework/Test/TestFuncCmp.cpp \
+	   testframework/Test/TestManager.cpp \
+	   testframework/Test/TestSuite.cpp \
+	   testframework/Gui/Window.cpp \
+	   testframework/Gui/MainWindow.cpp \
+	   testframework/Gui/TestWindow.cpp \
+	   testframework/Gui/ErrorWindow.cpp \
+	   testframework/Utils/Functions.cpp
 
 OBJ := ${SRC:.cpp=.o}
 
 INC := -I. \
 		-I./testframework 
 
-CC		:= g+Funtions
+CC		:= g++
 CFLAGS	:=	-Werror \
 			-Wall \
 			-Wextra \

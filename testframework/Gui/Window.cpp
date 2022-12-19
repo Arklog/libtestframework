@@ -1,4 +1,5 @@
 #include "Gui/Window.h"
+#include "Window.h"
 
 Window::Window(WINDOW *window)
     : _window(window), _border('#'), _padx(0), _pady(0) {}
@@ -81,5 +82,5 @@ int Window::get_maxy() {
   if (this->get())
     return (getmaxy(this->get()));
   else
-    return (0);
+	return (0);
 }

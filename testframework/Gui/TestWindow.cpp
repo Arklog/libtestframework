@@ -1,6 +1,6 @@
 #include "Gui/TestWindow.h"
 
-TestWindow::TestWindow(WINDOW *window): Window(window)
+TestWindow::TestWindow(WINDOW *window): Window(window, '#', 3, 2)
 {
 }
 
