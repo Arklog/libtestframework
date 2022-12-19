@@ -1,98 +1,101 @@
 #ifndef WINDOW_H
-# define WINDOW_H
+#define WINDOW_H
 
-# include <ncurses.h>
-# include <vector>
-# include <cctype>
+#include <cctype>
+#include <ncurses.h>
+#include <vector>
 
-class Window
-{
-	private:
-		WINDOW				*_window;
-		char				_border;
+class Window {
+private:
+  WINDOW *_window;
+  char _border;
 
-	public:
-		Window(WINDOW *window);
-		~Window();
+  int _padx;
+  int _pady;
 
-		/**
-		 * Return this window ncurses window pointer
-		 */
-		WINDOW			*get();
+public:
+  Window(WINDOW *window);
+  Window(WINDOW *window, char border, int padx, int pady);
+  ~Window();
 
-		/**
-		 * Reset cursor position
-		 */
-		void			reset_cursor();
+  /**
+   * Return this window ncurses window pointer
+   */
+  WINDOW *get();
 
-		/**
-		 * Clear this window screen
-		 */
-		void			clear();
+  /**
+   * Reset cursor position
+   */
+  void reset_cursor();
 
-		/**
-		 * Draw this window border
-		 */
-		void			draw_border();
+  /**
+   * Clear this window screen
+   */
+  void clear();
 
-		/**
-		 * Set this window border character
-		 *
-		 * @param c		the new border character, must be printable
-		 */
-		void			set_border(char c);
+  /**
+   * Draw this window border
+   */
+  void draw_border();
 
-		/**
-		 * Get this window border character
-		 *
-		 * @return		the character used to draw the border
-		 */
-		char			get_border();
+  /**
+   * Set this window border character
+   *
+   * @param c		the new border character, must be printable
+   */
+  void set_border(char c);
 
-		/**
-		 * Pure virtual function used to draw this window
-		 */
-		virtual void	display() = 0;
+  /**
+   * Get this window border character
+   *
+   * @return		the character used to draw the border
+   */
+  char get_border();
 
-		/**
-		 * Refresh this window screen
-		 */
-		void			refresh();
+  /**
+   * Pure virtual function used to draw this window
+   */
+  virtual void display() = 0;
 
-		/**
-		 * Get this window x cursor position
-		 *
-		 * @return		the current position of this window
-		 * 				cursor in x
-		 */
-		int				get_x();
+  /**
+   * Refresh this window screen
+   */
+  void refresh();
 
-		/**
-		 * Set this window x cursor position
-		 *
-		 * @param x		the new x position of the cursor, it must
-		 * 				be inferior to the maximum x position
-		 */
-		void			set_x(int x);
+  /**
+   * Get this window x cursor position
+   *
+   * @return		the current position of this window
+   * 				cursor in x
+   */
+  int get_x();
 
-		/**
-		 * Return this window y cursor position
-		 *
-		 * @return		the current position of this window
-		 * 				cursor in y
-		 */
-		int				get_y();
+  /**
+   * Set this window x cursor position
+   *
+   * @param x		the new x position of the cursor, it must
+   * 				be inferior to the maximum x position
+   */
+  void set_x(int x);
 
-		/**
-		 * Set this window y cursor position
-		 *
-		 * @param y		the new y position of the cursor, it must be
-		 * 				inferior to the maximum y position
-		 */
-		void			set_y(int y);
+  /**
+   * Return this window y cursor position
+   *
+   * @return		the current position of this window
+   * 				cursor in y
+   */
+  int get_y();
 
-		int				get_maxx();
-		int				get_maxy();
+  /**
+   * Set this window y cursor position
+   *
+   * @param y		the new y position of the cursor, it must be
+   * 				inferior to the maximum y position
+   */
+  void set_y(int y);
+
+  int get_maxx();
+  int get_maxy();
 };
 
 #endif
