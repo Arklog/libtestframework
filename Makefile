@@ -33,7 +33,7 @@ lib: ${OBJ}
 	ar rcs ${NAME} ${OBJ}
 
 test: test.o all
-	${CC} ${CFLAGS} ${INC} -o $@ test.o ${OBJ} -L. -ltestframework -lncurses
+	${CC} ${CFLAGS} ${INC} -o $@ test.o -L. -ltestframework -lncurses
 
 %.o: %.cpp
 	${CC} ${CFLAGS} -c $< -o $@
@@ -41,4 +41,4 @@ test: test.o all
 re: | clean all
 
 clean:
-	@rm -rf ${OBJ} ${NAME} test
+	@rm -rf ${OBJ} ${NAME} test{.o,}

@@ -42,39 +42,18 @@ void	MainWindow::display()
 
 void	MainWindow::display_loop()
 {
-	#ifdef MULTITHREAD
-	auto l = [] () {
-		auto m = TestManager::get();
-		m->run_all();
+	auto l = [](){
+		TestManager::get()->run_all();
 	};
+
+	this->display();
 	std::thread th(l);
-	#endif
-	#ifndef DEBUG
-
-	#ifdef MULTITHREAD
-	this->display();
-	while (!th.joinable())
+	while (!TestManager::get()->finished())
+	{
 		this->display();
-	#else
-	while (TestManager::get()->run_one())
-		this->display();
-	#endif
-
-	#else
-
-	#ifdef MULTITHREAD
-	while (th.joinable())
-		continue;
-	this->display();
-	#else
-	while (TestManager::get()->run_one())
-		continue;
-	#endif
-
-	#endif
-	#ifdef MULTITHREAD
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
 	th.join();
-	#endif
-	getch();
 	this->display();
+	getch();
 }

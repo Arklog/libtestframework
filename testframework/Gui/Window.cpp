@@ -12,8 +12,8 @@ Window::~Window() { delwin(this->_window); }
 void Window::reset_cursor() {
   if (!this->get())
     return;
-  this->get()->_curx = 0 + this->get_padx();
-  this->get()->_cury = 0 + this->get_pady();
+  this->set_x(0);
+  this->set_y(0);
 }
 
 void Window::clear() {
@@ -45,7 +45,7 @@ void Window::refresh() {
 
 int Window::get_x() {
   if (this->get())
-    return (this->get()->_curx);
+    return (this->get()->_curx - this->get_padx());
   else
     return (0);
 }
@@ -59,7 +59,7 @@ void Window::set_x(int x) {
 
 int Window::get_y() {
   if (this->get())
-    return (this->get()->_cury);
+    return (this->get()->_cury - this->_pady);
   else
     return (0);
 }

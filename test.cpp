@@ -5,6 +5,7 @@
 #include "Test/TestManager.h"
 #include "Gui/MainWindow.h"
 #include "Generator/GeneratorRange.h"
+#include "Utils/Functions.h"
 #include <cctype>
 
 int main()
@@ -27,7 +28,39 @@ int main()
 	std::function<int(int)> f = [](int i) {
 		return std::isprint(i);
 	};
-	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xff)));
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
+	suite = new TestSuite("isprint");
+	suite->add_test(t);
+	TestManager::get()->add_test(suite);
+	t = new TestFuncCmpGen(f, f, new GeneratorList<int>(new GeneratorRange<int>(0, 0xffff)));
 	suite = new TestSuite("isprint");
 	suite->add_test(t);
 	TestManager::get()->add_test(suite);

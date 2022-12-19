@@ -10,6 +10,7 @@ TestManager::TestManager()
 TestManager::~TestManager() {
   std::vector<Test *>::iterator iter;
 
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
   for (iter = this->_tests.begin(); iter != this->_tests.end(); ++iter)
     delete *iter;
 }
@@ -21,13 +22,18 @@ std::shared_ptr<TestManager> TestManager::get() {
 }
 
 void TestManager::add_test(Test *t) {
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
   this->_tests.push_back(t);
   this->_iter = this->_tests.begin();
 }
 
-std::vector<Test *> TestManager::get_tests() { return (this->_tests); }
+std::vector<Test *> TestManager::get_tests() {
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
+  return (this->_tests);
+}
 
 std::vector<Test *> TestManager::get_executed(bool all, bool success) {
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
   std::vector<Test *> vec;
   std::vector<Test *>::iterator iter;
 
@@ -41,6 +47,7 @@ std::vector<Test *> TestManager::get_executed(bool all, bool success) {
 }
 
 bool TestManager::run_one() {
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
   if (this->_iter != this->_tests.end()) {
     (*(this->_iter))->run();
     if ((*this->_iter)->executed())
@@ -50,26 +57,22 @@ bool TestManager::run_one() {
   return (false);
 }
 
-bool TestManager::finished() const {
+bool TestManager::finished() {
+  std::lock_guard<std::mutex> gtests(this->_tests_mutex);
   for (auto i : this->_tests)
     if (!i->executed())
       return (false);
   return (true);
 }
 void TestManager::run_all() {
-  using g = std::lock_guard<std::mutex>;
   auto l = [this]() {
     Test *t;
-    g *guard;
 
     while (!this->finished()) {
-      guard = new g(this->_iter_mutex);
       if (this->_iter == this->_tests.end()) {
-        delete guard;
         return;
       } else
         t = *(this->_iter++);
-      delete guard;
       while (!t->executed())
         t->run();
     }

@@ -23,7 +23,7 @@ private:
    * @brief Iterator to the last test run
    */
   std::vector<Test *>::iterator _iter;
-  std::mutex _iter_mutex;
+  std::mutex _tests_mutex;
 
   std::array<std::thread, MANAGER_THREADS> _th;
 
@@ -77,7 +77,7 @@ public:
   bool run_one();
 
   void run_all();
-  bool finished() const;
+  bool finished();
 };
 
 #endif

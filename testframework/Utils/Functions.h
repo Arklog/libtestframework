@@ -9,4 +9,7 @@ std::string toString(T i)
 	return (std::to_string(i));
 }
 
+template <>
+std::string toString<const char *>(const char *str);
+
 #endif
