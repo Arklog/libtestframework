@@ -144,6 +144,21 @@ testframework/Generator/Generator.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/Generator.s
 .PHONY : testframework/Generator/Generator.s
 
+# target to build an object file
+testframework/Generator/GeneratorRange.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/GeneratorRange.o
+.PHONY : testframework/Generator/GeneratorRange.o
+
+# target to preprocess a source file
+testframework/Generator/GeneratorRange.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/GeneratorRange.i
+.PHONY : testframework/Generator/GeneratorRange.i
+
+# target to generate assembly for a file
+testframework/Generator/GeneratorRange.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/GeneratorRange.s
+.PHONY : testframework/Generator/GeneratorRange.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -156,6 +171,9 @@ help:
 	@echo "... testframework/Generator/Generator.o"
 	@echo "... testframework/Generator/Generator.i"
 	@echo "... testframework/Generator/Generator.s"
+	@echo "... testframework/Generator/GeneratorRange.o"
+	@echo "... testframework/Generator/GeneratorRange.i"
+	@echo "... testframework/Generator/GeneratorRange.s"
 .PHONY : help
 
 

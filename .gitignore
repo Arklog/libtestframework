@@ -3,3 +3,4 @@ gcm.cache
 cmake_install.cmake
 CMakeCache.txt
 libtestframework.a
+.vscode
