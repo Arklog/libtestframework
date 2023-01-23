@@ -129,6 +129,19 @@ testframework/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/build
 .PHONY : testframework/fast
 
+#=============================================================================
+# Target rules for targets named testgenerator
+
+# Build rule for target.
+testgenerator: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testgenerator
+.PHONY : testgenerator
+
+# fast build rule for target.
+testgenerator/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testgenerator.dir/build.make CMakeFiles/testgenerator.dir/build
+.PHONY : testgenerator/fast
+
 # target to build an object file
 testframework/Generator/Generator.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/Generator.o
@@ -159,6 +172,21 @@ testframework/Generator/GeneratorRange.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/GeneratorRange.s
 .PHONY : testframework/Generator/GeneratorRange.s
 
+# target to build an object file
+tests/generator.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testgenerator.dir/build.make CMakeFiles/testgenerator.dir/tests/generator.o
+.PHONY : tests/generator.o
+
+# target to preprocess a source file
+tests/generator.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testgenerator.dir/build.make CMakeFiles/testgenerator.dir/tests/generator.i
+.PHONY : tests/generator.i
+
+# target to generate assembly for a file
+tests/generator.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testgenerator.dir/build.make CMakeFiles/testgenerator.dir/tests/generator.s
+.PHONY : tests/generator.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -168,12 +196,16 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... testframework"
+	@echo "... testgenerator"
 	@echo "... testframework/Generator/Generator.o"
 	@echo "... testframework/Generator/Generator.i"
 	@echo "... testframework/Generator/Generator.s"
 	@echo "... testframework/Generator/GeneratorRange.o"
 	@echo "... testframework/Generator/GeneratorRange.i"
 	@echo "... testframework/Generator/GeneratorRange.s"
+	@echo "... tests/generator.o"
+	@echo "... tests/generator.i"
+	@echo "... tests/generator.s"
 .PHONY : help
 
 

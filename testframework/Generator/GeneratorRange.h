@@ -19,7 +19,9 @@ template <typename T> class GeneratorRange : public Generator<T> {
 
 template <typename T>
 GeneratorRange<T>::GeneratorRange(std::vector<T> elements)
-	: Generator<T>(elements.at(0), elements.size() - 1) {}
+	: Generator<T>(elements.at(0), elements.size() - 1), vec(elements) {}
+
+template <typename T> GeneratorRange<T>::~GeneratorRange() {}
 
 template <typename T>
 void GeneratorRange<T>::generate_next()

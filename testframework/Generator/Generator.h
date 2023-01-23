@@ -82,17 +82,17 @@ Generator<T>::Generator(T val, size_t max)
 template <typename T> Generator<T>::~Generator() {}
 
 template <typename T> T Generator<T>::get_current() const {
-	return this->current;
+	return this->value_current;
 }
 
 template <typename T> T Generator<T>::get_next() {
 	this->generate_next();
-	return this->current;
+	return this->get_current();
 }
 
 template <typename T> T Generator<T>::get_at(size_t i) {
 	this->generate_at(i);
-	return this->current;
+	return this->get_current();
 }
 
 template <typename T> size_t Generator<T>::get_index() const {
