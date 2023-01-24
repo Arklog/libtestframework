@@ -1,1 +1,1 @@
-#include "testframework/Generator/GeneratorRange.h"
+#include "testframework/Generator/GeneratorArray.h"
