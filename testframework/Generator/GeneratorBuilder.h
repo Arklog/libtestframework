@@ -15,7 +15,7 @@ namespace GeneratorBuilder {
 template <typename T>
 Generator<T> *GeneratorBuilder::create_generator(std::vector<T> vec)
 {
-	return new GeneratorRange<T>(vec);
+	return new GeneratorArray<T>(vec);
 }
 
 #endif
