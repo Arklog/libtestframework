@@ -4,13 +4,13 @@
 #include "Generator.h"
 #include <vector>
 
-template <typename T> class GeneratorRange : public Generator<T> {
+template <typename T> class GeneratorArray : public Generator<T> {
   private:
 	std::vector<T> vec;
 
   public:
-	GeneratorRange(std::vector<T> elements);
-	~GeneratorRange();
+	GeneratorArray(std::vector<T> elements);
+	~GeneratorArray();
 
 	virtual void generate_next() override;
 	virtual void generate_at(size_t i) override;
@@ -18,13 +18,13 @@ template <typename T> class GeneratorRange : public Generator<T> {
 };
 
 template <typename T>
-GeneratorRange<T>::GeneratorRange(std::vector<T> elements)
+GeneratorArray<T>::GeneratorArray(std::vector<T> elements)
 	: Generator<T>(elements.at(0), elements.size() - 1), vec(elements) {}
 
-template <typename T> GeneratorRange<T>::~GeneratorRange() {}
+template <typename T> GeneratorArray<T>::~GeneratorArray() {}
 
 template <typename T>
-void GeneratorRange<T>::generate_next()
+void GeneratorArray<T>::generate_next()
 {
 	if (this->get_index() == this->get_index_max())
 		return;
@@ -34,7 +34,7 @@ void GeneratorRange<T>::generate_next()
 }
 
 template <typename T>
-void GeneratorRange<T>::generate_at(size_t i)
+void GeneratorArray<T>::generate_at(size_t i)
 {
 	if (i > this->get_index_max())
 		return;
@@ -44,7 +44,7 @@ void GeneratorRange<T>::generate_at(size_t i)
 		this->finished = true;
 }
 
-template <typename T> void GeneratorRange<T>::reset() {
+template <typename T> void GeneratorArray<T>::reset() {
 	this->index_current = 0;
 	this->value_current = this->vec.at(0);
 	this->finished = (this->index_current != this->index_max) ? false : true;
