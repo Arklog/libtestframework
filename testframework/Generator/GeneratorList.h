@@ -9,6 +9,7 @@ template <typename... T> class GeneratorList {
 	std::tuple<Generator<T> *...> list;
 	std::tuple<T...> current;
 
+
 	size_t index_current;
 	size_t index_max;
 
@@ -70,6 +71,8 @@ template <typename... T> bool GeneratorList<T...>::is_finished() const {
 template <typename... T>
 template <size_t... I>
 void GeneratorList<T...>::generate_next() {
+	if (this->index_current > this->index_max)
+		return ;
 }
 
 #endif

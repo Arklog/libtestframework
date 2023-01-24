@@ -2,7 +2,7 @@
 #define GENERATOR_BUILDER_H
 
 #include <vector>
-#include "testframework/Generator/GeneratorRange.h"
+#include "testframework/Generator/GeneratorArray.h"
 
 template <typename T>
 class Generator;
