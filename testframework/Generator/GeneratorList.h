@@ -9,14 +9,16 @@ template <typename... T> class GeneratorList {
 	std::tuple<Generator<T> *...> list;
 	std::tuple<T...> current;
 
-
 	size_t index_current;
 	size_t index_max;
 
 	bool finished;
 
+	template <size_t... I> void generate_index_max();
 	template <size_t... I> void generate_next();
 	template <size_t... I> void generate_at(size_t i);
+
+	template <size_t... I> void make_current();
 
   public:
 	GeneratorList(Generator<T> *...args);
@@ -35,6 +37,10 @@ template <typename... T> class GeneratorList {
 template <typename... T>
 GeneratorList<T...>::GeneratorList(Generator<T> *...args) {
 	this->list = std::make_tuple(args...);
+	this->index_current = 0;
+	using ttype = decltype(this->list);
+	this->generate_index_max<
+		std::make_index_sequence<std::tuple_size_v<ttype>>()>();
 }
 
 template <typename... T> GeneratorList<T...>::~GeneratorList() {}
@@ -45,17 +51,16 @@ std::tuple<T...> GeneratorList<T...>::get_current() const {
 }
 
 template <typename... T> std::tuple<T...> GeneratorList<T...>::get_next() {
-	this->generate_next<std::tuple_size_v<this->list>>();
+	this->generate_next<std::tuple_size_v<decltype(this->list)>>();
 	return this->get_current();
 }
 
 template <typename... T>
 std::tuple<T...> GeneratorList<T...>::get_at(size_t i) {
-	this->generate_at<std::tuple_size_v<this->list>>(i);
+	this->generate_at<std::tuple_size_v<decltype(this->list)>>(i);
 }
 
-template <typename... T>
-std::size_t GeneratorList<T...>::get_index() const {
+template <typename... T> std::size_t GeneratorList<T...>::get_index() const {
 	return this->index_current;
 }
 
@@ -70,9 +75,39 @@ template <typename... T> bool GeneratorList<T...>::is_finished() const {
 
 template <typename... T>
 template <size_t... I>
+void GeneratorList<T...>::generate_index_max() {
+	size_t max;
+	max = 1;
+
+	((max *= std::get<I>(this->list)), ...);
+	this->index_max = max;
+}
+
+template <typename... T>
+template <size_t... I>
 void GeneratorList<T...>::generate_next() {
-	if (this->index_current > this->index_max)
-		return ;
+	if (this->get_index() >= this->get_index_max())
+		return;
+	this->generate_at<I...>(++this->index_current);
+}
+
+template <typename... T>
+template <size_t... I>
+void GeneratorList<T...>::generate_at(size_t i) {
+	(([this, &i]() {
+		 auto gen = std::get<I>(this->list);
+		 gen->generate_at(i % (gen->get_index_max() + 1));
+		 i /= gen->get_index_max() + 1;
+	 }()),
+	 ...);
+	this->make_current<I...>();
+}
+
+template <typename... T>
+template <size_t... I>
+void GeneratorList<T...>::make_current() {
+	((std::get<I>(this->current) = std::get<I>(this->list)->get_current()),
+	 ...);
 }
 
 #endif
