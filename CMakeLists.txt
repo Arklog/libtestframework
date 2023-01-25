@@ -5,32 +5,35 @@ set (CMAKE_EXPORT_COMPILE_COMMANDS true)
 set (CMAKE_CXX_COMPILER /usr/bin/clang++)
 add_compile_options(-std=c++20 -g -I.)
 
-set (SRC testframework/testframework/TestFramework.cpp
-			testframework/Generator/Generator.cpp 
-			testframework/Generator/GeneratorArray.cpp
-			testframework/Database/Database.cpp)
-set (SRC_GUI Qt/main.cpp 
-			Qt/Window/MainWindow.cpp)
-set (SRC_SQLITE lib/sqlite3/sqlite3.c)
+file(GLOB SRC testframework/**/*.cpp)
+file(GLOB SRC_GUI Qt/*.cpp
+					Qt/**/*.cpp)
+file(GLOB SRC_SQLITE lib/sqlite3/*.c)
 
+
+# sqlite3 library
 add_library(sqlite ${SRC_SQLITE})
 
+# testframework library
 add_library(testframework ${SRC})
 add_dependencies(testframework sqlite)
 target_link_libraries(testframework sqlite)
 target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
 
+# testframework program
+add_executable(testframeworkui ${SRC_GUI})
+add_dependencies(testframeworkui  testframework)
+target_sources(testframeworkui PRIVATE ${SRC_GUI})
+target_link_libraries(testframeworkui Qt5Core Qt5Gui Qt5Widgets)
+target_compile_options(testframeworkui  PRIVATE -fPIC -I/usr/include/x86_64-linux-gnu/qt5)
+
+# tests for the generator class
 add_executable(testgenerator tests/generator.cpp)
 add_dependencies(testgenerator testframework)
 target_link_libraries(testgenerator testframework)
 target_compile_options(testgenerator PRIVATE -Wall -Wextra -Werror)
 
+# tests for the database
 add_executable(testdb tests/database.cpp)
 add_dependencies(testdb testframework)
 target_link_libraries(testdb testframework)
-
-add_executable(gui tests/gui.cpp)
-add_dependencies(gui testframework)
-target_sources(gui PRIVATE ${SRC_GUI})
-target_link_libraries(gui Qt5Core Qt5Gui Qt5Widgets)
-target_compile_options(gui PRIVATE -fPIC -I/usr/include/x86_64-linux-gnu/qt5)

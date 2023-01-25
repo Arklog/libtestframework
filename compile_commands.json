@@ -1,13 +1,18 @@
 [
 {
   "directory": "/home/pierre/Documents/project/libtestframework",
+  "command": "/usr/bin/cc   -std=c++20 -g -I. -o CMakeFiles/sqlite.dir/lib/sqlite3/shell.c.o -c /home/pierre/Documents/project/libtestframework/lib/sqlite3/shell.c",
+  "file": "/home/pierre/Documents/project/libtestframework/lib/sqlite3/shell.c"
+},
+{
+  "directory": "/home/pierre/Documents/project/libtestframework",
   "command": "/usr/bin/cc   -std=c++20 -g -I. -o CMakeFiles/sqlite.dir/lib/sqlite3/sqlite3.c.o -c /home/pierre/Documents/project/libtestframework/lib/sqlite3/sqlite3.c",
   "file": "/home/pierre/Documents/project/libtestframework/lib/sqlite3/sqlite3.c"
 },
 {
   "directory": "/home/pierre/Documents/project/libtestframework",
-  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/testframework/TestFramework.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/testframework/TestFramework.cpp",
-  "file": "/home/pierre/Documents/project/libtestframework/testframework/testframework/TestFramework.cpp"
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/Database/Database.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/Database/Database.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/testframework/Database/Database.cpp"
 },
 {
   "directory": "/home/pierre/Documents/project/libtestframework",
@@ -21,8 +26,28 @@
 },
 {
   "directory": "/home/pierre/Documents/project/libtestframework",
-  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/Database/Database.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/Database/Database.cpp",
-  "file": "/home/pierre/Documents/project/libtestframework/testframework/Database/Database.cpp"
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/Loader/LibLoader.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/Loader/LibLoader.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/testframework/Loader/LibLoader.cpp"
+},
+{
+  "directory": "/home/pierre/Documents/project/libtestframework",
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/Test/TestBase.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/Test/TestBase.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/testframework/Test/TestBase.cpp"
+},
+{
+  "directory": "/home/pierre/Documents/project/libtestframework",
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -Wall -Wextra -Werror -std=gnu++20 -o CMakeFiles/testframework.dir/testframework/testframework/TestFramework.cpp.o -c /home/pierre/Documents/project/libtestframework/testframework/testframework/TestFramework.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/testframework/testframework/TestFramework.cpp"
+},
+{
+  "directory": "/home/pierre/Documents/project/libtestframework",
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -fPIC -I/usr/include/x86_64-linux-gnu/qt5 -std=gnu++20 -o CMakeFiles/testframeworkui.dir/Qt/Window/MainWindow.cpp.o -c /home/pierre/Documents/project/libtestframework/Qt/Window/MainWindow.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/Qt/Window/MainWindow.cpp"
+},
+{
+  "directory": "/home/pierre/Documents/project/libtestframework",
+  "command": "/usr/bin/clang++   -std=c++20 -g -I. -fPIC -I/usr/include/x86_64-linux-gnu/qt5 -std=gnu++20 -o CMakeFiles/testframeworkui.dir/Qt/main.cpp.o -c /home/pierre/Documents/project/libtestframework/Qt/main.cpp",
+  "file": "/home/pierre/Documents/project/libtestframework/Qt/main.cpp"
 },
 {
   "directory": "/home/pierre/Documents/project/libtestframework",
@@ -33,20 +58,5 @@
   "directory": "/home/pierre/Documents/project/libtestframework",
   "command": "/usr/bin/clang++   -std=c++20 -g -I. -std=gnu++20 -o CMakeFiles/testdb.dir/tests/database.cpp.o -c /home/pierre/Documents/project/libtestframework/tests/database.cpp",
   "file": "/home/pierre/Documents/project/libtestframework/tests/database.cpp"
-},
-{
-  "directory": "/home/pierre/Documents/project/libtestframework",
-  "command": "/usr/bin/clang++   -std=c++20 -g -I. -fPIC -I/usr/include/x86_64-linux-gnu/qt5 -std=gnu++20 -o CMakeFiles/gui.dir/tests/gui.cpp.o -c /home/pierre/Documents/project/libtestframework/tests/gui.cpp",
-  "file": "/home/pierre/Documents/project/libtestframework/tests/gui.cpp"
-},
-{
-  "directory": "/home/pierre/Documents/project/libtestframework",
-  "command": "/usr/bin/clang++   -std=c++20 -g -I. -fPIC -I/usr/include/x86_64-linux-gnu/qt5 -std=gnu++20 -o CMakeFiles/gui.dir/Qt/main.cpp.o -c /home/pierre/Documents/project/libtestframework/Qt/main.cpp",
-  "file": "/home/pierre/Documents/project/libtestframework/Qt/main.cpp"
-},
-{
-  "directory": "/home/pierre/Documents/project/libtestframework",
-  "command": "/usr/bin/clang++   -std=c++20 -g -I. -fPIC -I/usr/include/x86_64-linux-gnu/qt5 -std=gnu++20 -o CMakeFiles/gui.dir/Qt/Window/MainWindow.cpp.o -c /home/pierre/Documents/project/libtestframework/Qt/Window/MainWindow.cpp",
-  "file": "/home/pierre/Documents/project/libtestframework/Qt/Window/MainWindow.cpp"
 }
 ]

@@ -9,3 +9,5 @@ build
 gui
 .ccls-cache
 libsqlite.a
+testdb
+Makefile
