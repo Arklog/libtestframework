@@ -117,6 +117,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named sqlite
+
+# Build rule for target.
+sqlite: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 sqlite
+.PHONY : sqlite
+
+# fast build rule for target.
+sqlite/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sqlite.dir/build.make CMakeFiles/sqlite.dir/build
+.PHONY : sqlite/fast
+
+#=============================================================================
 # Target rules for targets named testframework
 
 # Build rule for target.
@@ -141,6 +154,19 @@ testgenerator: cmake_check_build_system
 testgenerator/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testgenerator.dir/build.make CMakeFiles/testgenerator.dir/build
 .PHONY : testgenerator/fast
+
+#=============================================================================
+# Target rules for targets named testdb
+
+# Build rule for target.
+testdb: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 testdb
+.PHONY : testdb
+
+# fast build rule for target.
+testdb/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testdb.dir/build.make CMakeFiles/testdb.dir/build
+.PHONY : testdb/fast
 
 #=============================================================================
 # Target rules for targets named gui
@@ -203,6 +229,54 @@ Qt/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gui.dir/build.make CMakeFiles/gui.dir/Qt/main.cpp.s
 .PHONY : Qt/main.cpp.s
 
+lib/sqlite3/sqlite3.o: lib/sqlite3/sqlite3.c.o
+.PHONY : lib/sqlite3/sqlite3.o
+
+# target to build an object file
+lib/sqlite3/sqlite3.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sqlite.dir/build.make CMakeFiles/sqlite.dir/lib/sqlite3/sqlite3.c.o
+.PHONY : lib/sqlite3/sqlite3.c.o
+
+lib/sqlite3/sqlite3.i: lib/sqlite3/sqlite3.c.i
+.PHONY : lib/sqlite3/sqlite3.i
+
+# target to preprocess a source file
+lib/sqlite3/sqlite3.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sqlite.dir/build.make CMakeFiles/sqlite.dir/lib/sqlite3/sqlite3.c.i
+.PHONY : lib/sqlite3/sqlite3.c.i
+
+lib/sqlite3/sqlite3.s: lib/sqlite3/sqlite3.c.s
+.PHONY : lib/sqlite3/sqlite3.s
+
+# target to generate assembly for a file
+lib/sqlite3/sqlite3.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sqlite.dir/build.make CMakeFiles/sqlite.dir/lib/sqlite3/sqlite3.c.s
+.PHONY : lib/sqlite3/sqlite3.c.s
+
+testframework/Database/Database.o: testframework/Database/Database.cpp.o
+.PHONY : testframework/Database/Database.o
+
+# target to build an object file
+testframework/Database/Database.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Database/Database.cpp.o
+.PHONY : testframework/Database/Database.cpp.o
+
+testframework/Database/Database.i: testframework/Database/Database.cpp.i
+.PHONY : testframework/Database/Database.i
+
+# target to preprocess a source file
+testframework/Database/Database.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Database/Database.cpp.i
+.PHONY : testframework/Database/Database.cpp.i
+
+testframework/Database/Database.s: testframework/Database/Database.cpp.s
+.PHONY : testframework/Database/Database.s
+
+# target to generate assembly for a file
+testframework/Database/Database.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Database/Database.cpp.s
+.PHONY : testframework/Database/Database.cpp.s
+
 testframework/Generator/Generator.o: testframework/Generator/Generator.cpp.o
 .PHONY : testframework/Generator/Generator.o
 
@@ -250,6 +324,54 @@ testframework/Generator/GeneratorArray.s: testframework/Generator/GeneratorArray
 testframework/Generator/GeneratorArray.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/Generator/GeneratorArray.cpp.s
 .PHONY : testframework/Generator/GeneratorArray.cpp.s
+
+testframework/testframework/TestFramework.o: testframework/testframework/TestFramework.cpp.o
+.PHONY : testframework/testframework/TestFramework.o
+
+# target to build an object file
+testframework/testframework/TestFramework.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/testframework/TestFramework.cpp.o
+.PHONY : testframework/testframework/TestFramework.cpp.o
+
+testframework/testframework/TestFramework.i: testframework/testframework/TestFramework.cpp.i
+.PHONY : testframework/testframework/TestFramework.i
+
+# target to preprocess a source file
+testframework/testframework/TestFramework.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/testframework/TestFramework.cpp.i
+.PHONY : testframework/testframework/TestFramework.cpp.i
+
+testframework/testframework/TestFramework.s: testframework/testframework/TestFramework.cpp.s
+.PHONY : testframework/testframework/TestFramework.s
+
+# target to generate assembly for a file
+testframework/testframework/TestFramework.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testframework.dir/build.make CMakeFiles/testframework.dir/testframework/testframework/TestFramework.cpp.s
+.PHONY : testframework/testframework/TestFramework.cpp.s
+
+tests/database.o: tests/database.cpp.o
+.PHONY : tests/database.o
+
+# target to build an object file
+tests/database.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testdb.dir/build.make CMakeFiles/testdb.dir/tests/database.cpp.o
+.PHONY : tests/database.cpp.o
+
+tests/database.i: tests/database.cpp.i
+.PHONY : tests/database.i
+
+# target to preprocess a source file
+tests/database.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testdb.dir/build.make CMakeFiles/testdb.dir/tests/database.cpp.i
+.PHONY : tests/database.cpp.i
+
+tests/database.s: tests/database.cpp.s
+.PHONY : tests/database.s
+
+# target to generate assembly for a file
+tests/database.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/testdb.dir/build.make CMakeFiles/testdb.dir/tests/database.cpp.s
+.PHONY : tests/database.cpp.s
 
 tests/generator.o: tests/generator.cpp.o
 .PHONY : tests/generator.o
@@ -308,6 +430,8 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... gui"
+	@echo "... sqlite"
+	@echo "... testdb"
 	@echo "... testframework"
 	@echo "... testgenerator"
 	@echo "... Qt/Window/MainWindow.o"
@@ -316,12 +440,24 @@ help:
 	@echo "... Qt/main.o"
 	@echo "... Qt/main.i"
 	@echo "... Qt/main.s"
+	@echo "... lib/sqlite3/sqlite3.o"
+	@echo "... lib/sqlite3/sqlite3.i"
+	@echo "... lib/sqlite3/sqlite3.s"
+	@echo "... testframework/Database/Database.o"
+	@echo "... testframework/Database/Database.i"
+	@echo "... testframework/Database/Database.s"
 	@echo "... testframework/Generator/Generator.o"
 	@echo "... testframework/Generator/Generator.i"
 	@echo "... testframework/Generator/Generator.s"
 	@echo "... testframework/Generator/GeneratorArray.o"
 	@echo "... testframework/Generator/GeneratorArray.i"
 	@echo "... testframework/Generator/GeneratorArray.s"
+	@echo "... testframework/testframework/TestFramework.o"
+	@echo "... testframework/testframework/TestFramework.i"
+	@echo "... testframework/testframework/TestFramework.s"
+	@echo "... tests/database.o"
+	@echo "... tests/database.i"
+	@echo "... tests/database.s"
 	@echo "... tests/generator.o"
 	@echo "... tests/generator.i"
 	@echo "... tests/generator.s"

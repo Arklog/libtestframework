@@ -8,3 +8,4 @@ testgenerator
 build
 gui
 .ccls-cache
+libsqlite.a
