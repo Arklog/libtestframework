@@ -3,7 +3,7 @@
 #include "testframework/testframework/TestFramework.h"
 
 MainWindow::MainWindow() {
-	this->resize(400, 400);
+	this->resize(600, 800);
 	this->setWindowTitle(QApplication::translate("toplevel", "TestFramework"));
 	this->test_widgets = std::vector<TestFrameworkTest *>();
 	this->setup_widgets();
@@ -11,6 +11,8 @@ MainWindow::MainWindow() {
 }
 
 MainWindow::~MainWindow() {
+	this->test_run_thread.join();
+
 	delete this->menu_file;
 	delete this->menu_run;
 	delete this->central_widget;
@@ -98,13 +100,21 @@ void MainWindow::run_tests() {
 	TestFramework::get_instance()->get_test_manager()->execute_tests();
 #else
 	pid = TestFramework::get_instance()->get_test_manager()->fork_run();
-	waitpid(pid, &status, 0);
+	this->test_run_thread = std::thread([this, pid, &status]() {
+		waitpid(pid, &status, 0);
+		std::lock_guard<std::mutex> guard(this->finished_mutex);
+		this->finished = true;
+	});
+	
+	for (auto i: this->test_widgets)
+		i->start();
 
 #ifdef DEBUG
-	if (status) {
+		if (status) {
 		std::cout << "[ERROR]: child process failed error code " << status
 				  << std::endl;
-	} else {
+	}
+	else {
 		std::cout << "[INFO]: child process finished successfully\n";
 	}
 #endif

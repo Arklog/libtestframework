@@ -2,6 +2,7 @@
 #define DATABASE_H
 
 #include "lib/sqlite3/sqlite3.h"
+
 #include <chrono>
 #include <exception>
 #include <functional>
@@ -9,12 +10,15 @@
 #include <mutex>
 #include <string>
 
+#include "testframework/Database/QueryResult.h"
+
 class TestBase;
 
 class Database {
   private:
 	std::mutex DB_mutex;
 	sqlite3 *DB;
+
 	std::string db_name;
 
 	void create_name();
@@ -24,6 +28,9 @@ class Database {
 			 void *addr = NULL);
 
 	size_t get_test_id(std::string testname);
+
+	std::vector<t_arg> get_args_for_result(int result_id);
+	std::vector<t_result> get_result_for_test(int test_id);
 
   public:
 	Database();
@@ -56,6 +63,14 @@ class Database {
 					std::vector<std::tuple<size_t, std::string>> args);
 
 	std::string get_db_name() const;
+
+	/**
+	 * @brief Get all informations about a test
+	 *
+	 * @param name the test's name
+	 * @return t_test
+	 */
+	t_test get_test_info(std::string name);
 };
 
 #endif

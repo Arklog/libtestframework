@@ -109,10 +109,10 @@ void Database::add_result(std::string testname, size_t index, bool result,
 						  std::vector<std::tuple<size_t, std::string>> args) {
 	int row_id;
 
-	std::string sql = "INSERT INTO result (test_id, test_index, result) VALUES(" +
-					  std::to_string(this->get_test_id(testname)) + ", " +
-					  std::to_string(index) + ", " + std::to_string(result) +
-					  ");";
+	std::string sql =
+		"INSERT INTO result (test_id, test_index, result) VALUES(" +
+		std::to_string(this->get_test_id(testname)) + ", " +
+		std::to_string(index) + ", " + std::to_string(result) + ");";
 	row_id = this->exec(sql);
 	for (auto arg : args) {
 		sql = "INSERT INTO arg(result_id, pos, value) VALUES (" +
@@ -122,7 +122,73 @@ void Database::add_result(std::string testname, size_t index, bool result,
 	}
 }
 
-std::string Database::get_db_name() const
-{
-	return this->db_name;
+std::string Database::get_db_name() const { return this->db_name; }
+
+std::vector<t_arg> Database::get_args_for_result(int result_id) {
+	std::string sql = "SELECT id,pos,value FROM arg WHERE result_id=" +
+					  std::to_string(result_id) + ";";
+	auto l = [](void *addr, int n, char **vals, char **field) {
+		t_arg a;
+		std::vector<t_arg> *v = (std::vector<t_arg> *)addr;
+
+		a.id = atoi(vals[0]);
+		a.pos = atoi(vals[1]);
+		a.value = std::string(vals[2]);
+
+		(void)n;
+		(void)field;
+		v->push_back(a);
+		return 0;
+	};
+	std::vector<t_arg> v;
+
+	this->exec(sql, l, &v);
+	return v;
+}
+
+std::vector<t_result> Database::get_result_for_test(int test_id) {
+	std::string sql = "SELECT id,test_index,result FROM result WHERE test_id=" +
+					  std::to_string(test_id) + ";";
+	auto l = [](void *addr, int n, char **vals, char **fields) {
+		t_result r;
+		std::vector<t_result> *v = (std::vector<t_result> *)addr;
+
+		r.id = atoi(vals[0]);
+		r.index = atoi(vals[1]);
+		r.result = bool(atoi(vals[2]));
+
+		(void)n;
+		(void)fields;
+		v->push_back(r);
+		return (0);
+	};
+
+	std::vector<t_result> v;
+	this->exec(sql, l, &v);
+
+	for (auto i : v)
+		i.args = this->get_args_for_result(i.id);
+
+	return v;
+}
+
+t_test Database::get_test_info(std::string name) {
+	std::string sql = "SELECT id,name from test WHERE name = '" + name + "';";
+	t_test t;
+	auto l = [](void *addr, int n, char **val, char **fields) {
+		t_test t;
+
+		t.id = atoi(val[0]);
+		t.name = std::string(val[1]);
+
+		(void)n;
+		(void)fields;
+
+		*(t_test *)addr = t;
+		return (0);
+	};
+
+	this->exec(sql, l, &t);
+	t.results = this->get_result_for_test(t.id);
+	return t;
 }
