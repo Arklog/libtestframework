@@ -12,3 +12,5 @@ libsqlite.a
 testdb
 Makefile
 compile_commands.json
+lib/boost_1_81_0
+libtestgui.so
