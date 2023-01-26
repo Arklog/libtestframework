@@ -21,6 +21,7 @@ class TestFramework {
 	~TestFramework();
 
 	static void set_instance(TestFramework *);
+	static TestBase *create_test_array(std::vector<TestBase *> v);
 	static TestFramework *get_instance();
 
 	/**
@@ -33,6 +34,7 @@ class TestFramework {
 	bool init(std::string project_name);
 
 	void new_project(std::string project_name);
+	void stop();
 
 	std::string get_project_name() const;
 

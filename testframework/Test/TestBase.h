@@ -6,6 +6,7 @@
 #include <tuple>
 #include <vector>
 
+
 class TestBase {
   private:
 	std::string testname;
@@ -21,12 +22,13 @@ class TestBase {
 	TestBase(std::string name);
 	virtual ~TestBase();
 
-	bool is_finished() const;
-
 	std::string get_name() const;
 
+	bool is_finished() const;
 	bool run_one();
 	bool run_all();
+
+	virtual size_t get_test_numbers() const;
 };
 
 #endif

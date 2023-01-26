@@ -14,7 +14,7 @@ class TestFramework;
 class LibLoader {
   private:
 	void *handle;
-	std::vector<TestBase *> (*f)(TestFramework *);
+	void (*f)(TestFramework *);
 
   public:
 	LibLoader();

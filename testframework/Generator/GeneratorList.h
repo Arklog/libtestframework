@@ -43,6 +43,7 @@ template <typename... T> class GeneratorList {
 
 template <typename... T>
 GeneratorList<T...>::GeneratorList(Generator<T> *...args) {
+	this->finished = false;
 	this->list = std::make_tuple(args...);
 	this->index_current = 0;
 	using ttype = decltype(this->list);
@@ -71,6 +72,7 @@ template <typename... T>
 std::tuple<T...> GeneratorList<T...>::get_at(size_t i) {
 	this->generate_at(
 		i, std::make_index_sequence<std::tuple_size_v<decltype(this->list)>>{});
+	return this->get_current();
 }
 
 template <typename... T> std::size_t GeneratorList<T...>::get_index() const {
@@ -93,8 +95,8 @@ void GeneratorList<T...>::generate_index_max(
 	size_t max;
 	max = 1;
 
-	((max *= std::get<I>(this->list)->get_index_max()), ...);
-	this->index_max = max;
+	((max *= std::get<I>(this->list)->get_index_max() + 1), ...);
+	this->index_max = max - 1;
 }
 
 template <typename... T>

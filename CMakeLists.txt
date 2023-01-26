@@ -2,8 +2,8 @@ project(libtestframework)
 cmake_minimum_required(VERSION 3.24)
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_EXPORT_COMPILE_COMMANDS true)
-set (CMAKE_CXX_COMPILER /usr/bin/g++)
-add_compile_options(-std=c++20 -g -I. -fPIC)
+set (CMAKE_CXX_COMPILER /usr/bin/clang++)
+add_compile_options(-std=c++20 -g -I. -fPIC -DDEBUG)
 
 file(GLOB SRC testframework/**/*.cpp)
 file(GLOB SRC_GUI Qt/*.cpp

@@ -8,7 +8,14 @@ TestFramework::TestFramework()
 	: project_name(""), test_manager(nullptr), database(nullptr),
 	  lib_loader(nullptr) {}
 
-TestFramework::~TestFramework() {}
+TestFramework::~TestFramework() {
+	if (this->database)
+		delete this->database;
+	if (this->test_manager)
+		delete this->test_manager;
+	if (this->lib_loader)
+		delete this->lib_loader;
+}
 
 void TestFramework::set_instance(TestFramework *i) {
 	TestFramework::instance = i;
@@ -43,7 +50,10 @@ void TestFramework::new_project(std::string project_name) {
 	if (this->test_manager)
 		delete this->test_manager;
 	this->init(project_name);
+
 }
+
+void TestFramework::stop() { delete TestFramework::instance; }
 
 std::string TestFramework::get_project_name() const {
 	return this->project_name;

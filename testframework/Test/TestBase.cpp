@@ -21,3 +21,8 @@ bool TestBase::run_all()
 {
 	return this->_run_all();
 }
+
+size_t TestBase::get_test_numbers() const
+{
+	return 1;
+}

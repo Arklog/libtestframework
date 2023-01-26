@@ -1,11 +1,12 @@
 #ifndef TEST_MANAGER_H
 #define TEST_MANAGER_H
 
-#include <mutex>
-#include <vector>
+#include <cstring>
 #include <array>
-#include <thread>
 #include <functional>
+#include <mutex>
+#include <thread>
+#include <vector>
 
 class TestBase;
 
@@ -17,7 +18,7 @@ class TestManager {
 
 	std::array<std::thread, 4> thead_list;
 
-	static std::function<void(TestBase*)> callback_add_test;
+	static std::function<void(TestBase *)> callback_add_test;
 
 	TestBase *get_next_test();
 
@@ -26,8 +27,17 @@ class TestManager {
 	~TestManager();
 
 	void add_test(TestBase *test);
-	void add_tests(std::vector<TestBase*> tests);
+	void add_tests(std::vector<TestBase *> tests);
 	void execute_tests();
+
+	/**
+	 * @brief Start running the tests after forking
+	 *
+	 * @return int the child process pid
+	 */
+	pid_t fork_run();
+
+	const std::vector<TestBase *> get_tests() const;
 };
 
 #endif

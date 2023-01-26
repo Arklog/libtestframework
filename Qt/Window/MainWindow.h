@@ -1,6 +1,9 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
+#include <vector>
+#include <sys/wait.h>
+
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
@@ -8,18 +11,29 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QtWidgets>
 
+#include "Qt/Widgets/TestFrameworkTest.h"
+
 class MainWindow : public QMainWindow {
   private:
 	QMenu *menu_file;
 	QMenu *menu_run;
+	QGridLayout *grid;
+	QVBoxLayout *test_layout;
+	QWidget *central_widget;
+	std::vector<TestFrameworkTest *> test_widgets;
+
 	void setup_widgets();
 	void setup_widget_menu();
+	void setup_widget_menu_file();
+	void setup_widget_menu_run();
 
   public:
 	MainWindow();
 	~MainWindow();
 
 	void open_lib();
+
+	void run_tests();
 };
 
 #endif
