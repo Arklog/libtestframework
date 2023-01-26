@@ -1,7 +1,10 @@
 #include "testframework/Database/Database.h"
+#include "testframework/Test/TestBase.h"
 #include "testframework/testframework/TestFramework.h"
 
-Database::Database() {}
+Database::Database() {
+	sqlite3_initialize();
+}
 
 Database::~Database() { sqlite3_close(this->DB); }
 
@@ -44,16 +47,34 @@ void Database::create_tables() {
 	this->exec(arg_sql);
 }
 
-void Database::exec(std::string sql) {
+int Database::exec(std::string sql,
+				   int (*callback)(void *, int, char **, char **), void *addr) {
 	int code;
 	char *error;
 
-	code = sqlite3_exec(this->DB, sql.c_str(), NULL, 0, &error);
+	code = sqlite3_exec(this->DB, sql.c_str(), callback, addr, &error);
 	if (code) {
 		std::cout << "[ERROR]: " << error << std::endl << sql << std::endl;
 		sqlite3_free(error);
 	}
+	return sqlite3_last_insert_rowid(this->DB);
 }
+
+size_t Database::get_test_id(std::string testname) {
+	int id;
+	std::string sql = "SELECT id FROM test WHERE name='" + testname + "';";
+	auto l = [](void *addr, int n, char **vals, char **names) {
+		(void)names;
+		if (!n)
+			return 1;
+		if (addr)
+			*((int *)addr) = atoi(vals[0]);
+		return 0;
+	};
+	this->exec(sql, l, &id);
+	return id;
+}
+
 void Database::create() {
 	int code;
 
@@ -66,9 +87,26 @@ void Database::create() {
 	this->create_tables();
 }
 
-void Database::add_test(std::string testname) {
+void Database::add_test(TestBase *test) {
 	std::string sql = "INSERT INTO test (name) "
 					  "VALUES ('" +
-					  testname + "');";
+					  test->get_name() + "');";
 	this->exec(sql);
+}
+
+void Database::add_result(std::string testname, size_t index, bool result,
+						  std::vector<std::tuple<size_t, std::string>> args) {
+	int row_id;
+
+	std::string sql = "INSERT INTO result (test_id, index, result) VALUES(" +
+					  std::to_string(this->get_test_id(testname)) + ", " +
+					  std::to_string(index) + ", " + std::to_string(result) +
+					  ");";
+	row_id = this->exec(sql);
+	for (auto arg : args) {
+		sql = "INSERT INTO arg(result_id, pos, value) VALUES (" +
+			  std::to_string(row_id) + ", " + std::to_string(std::get<0>(arg)) +
+			  ", " + std::get<1>(arg) + ");";
+		this->exec(sql);
+	}
 }

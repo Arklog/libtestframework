@@ -11,3 +11,4 @@ gui
 libsqlite.a
 testdb
 Makefile
+compile_commands.json

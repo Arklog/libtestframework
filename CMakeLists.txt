@@ -2,8 +2,8 @@ project(libtestframework)
 cmake_minimum_required(VERSION 3.24)
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_EXPORT_COMPILE_COMMANDS true)
-set (CMAKE_CXX_COMPILER /usr/bin/clang++)
-add_compile_options(-std=c++20 -g -I.)
+set (CMAKE_CXX_COMPILER /usr/bin/g++)
+add_compile_options(-std=c++20 -g -I. -fPIC)
 
 file(GLOB SRC testframework/**/*.cpp)
 file(GLOB SRC_GUI Qt/*.cpp
@@ -24,7 +24,7 @@ target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
 add_executable(testframeworkui ${SRC_GUI})
 add_dependencies(testframeworkui  testframework)
 target_sources(testframeworkui PRIVATE ${SRC_GUI})
-target_link_libraries(testframeworkui Qt5Core Qt5Gui Qt5Widgets)
+target_link_libraries(testframeworkui testframework Qt5Core Qt5Gui Qt5Widgets)
 target_compile_options(testframeworkui  PRIVATE -fPIC -I/usr/include/x86_64-linux-gnu/qt5)
 
 # tests for the generator class
@@ -37,3 +37,7 @@ target_compile_options(testgenerator PRIVATE -Wall -Wextra -Werror)
 add_executable(testdb tests/database.cpp)
 add_dependencies(testdb testframework)
 target_link_libraries(testdb testframework)
+
+add_library(testgui SHARED tests/gui.cpp)
+add_dependencies(testgui testframework)
+target_link_libraries(testgui testframework)

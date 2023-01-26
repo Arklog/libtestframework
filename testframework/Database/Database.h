@@ -1,12 +1,14 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <functional>
-#include <string>
-#include <iostream>
+#include "lib/sqlite3/sqlite3.h"
 #include <chrono>
 #include <exception>
-#include "lib/sqlite3/sqlite3.h"
+#include <functional>
+#include <iostream>
+#include <string>
+
+class TestBase;
 
 class Database {
   private:
@@ -15,7 +17,10 @@ class Database {
 
 	void create_name();
 	void create_tables();
-	void exec(std::string sql);
+	int exec(std::string sql,
+			 int (*callback)(void *, int, char **, char **) = NULL, void *addr = NULL);
+
+	size_t get_test_id(std::string testname);
 
   public:
 	Database();
@@ -29,8 +34,9 @@ class Database {
 	 */
 	void create();
 
-	void add_test(std::string testname);
-	void add_result(std::string testname, size_t index, bool result, std::vector<std::tuple<size_t, std::string>> args);
+	void add_test(TestBase *);
+	void add_result(std::string testname, size_t index, bool result,
+					std::vector<std::tuple<size_t, std::string>> args);
 };
 
 #endif
