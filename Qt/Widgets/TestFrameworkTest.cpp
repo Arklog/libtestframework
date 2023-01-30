@@ -3,6 +3,7 @@
 
 TestFrameworkTest::TestFrameworkTest(QWidget *parent, const TestBase *test) {
 	this->testname = test->get_name();
+	this->test_id = test->get_id();
 	this->index_max = test->get_test_numbers() - 1;
 	this->timer = new QTimer(this);
 	this->label = new QLabel();

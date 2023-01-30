@@ -11,6 +11,7 @@
 class TestFrameworkTest : public QWidget {
   private:
 	std::string testname;
+	size_t test_id;
 	size_t index_max;
 
 	bool finished;

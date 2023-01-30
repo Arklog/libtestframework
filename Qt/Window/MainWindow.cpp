@@ -24,9 +24,16 @@ MainWindow::~MainWindow() {
 
 void MainWindow::setup_widgets() {
 	this->setup_widget_menu();
+
 	this->grid = new QGridLayout();
 	this->test_layout = new QVBoxLayout();
+	this->info_layout = new QVBoxLayout();
+
+	this->info_layout->addWidget(new TestFrameworkTestInfo(0));
+
 	this->grid->addLayout(this->test_layout, 0, 0);
+	this->grid->addLayout(this->info_layout, 0, 1);
+
 	this->central_widget = new QWidget();
 	this->central_widget->setLayout(this->grid);
 	this->setCentralWidget(this->central_widget);
@@ -108,8 +115,7 @@ void MainWindow::update_tests() {
 	std::vector<t_socket_data> v;
 
 	this->finished_mutex.lock();
-	if (this->finished)
-	{
+	if (this->finished) {
 		this->timer->stop();
 		this->test_run_thread.join();
 	}

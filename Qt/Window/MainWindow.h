@@ -3,10 +3,10 @@
 
 #include <sys/wait.h>
 
-#include <vector>
+#include <iostream>
 #include <mutex>
 #include <thread>
-#include <iostream>
+#include <vector>
 
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QListWidget>
@@ -16,13 +16,35 @@
 #include <QtWidgets/QtWidgets>
 
 #include "Qt/Widgets/TestFrameworkTest.h"
+#include "Qt/Widgets/TestFrameworkTestInfo.h"
 
 class MainWindow : public QMainWindow {
   private:
+	/**
+	 * @brief File menu
+	 */
 	QMenu *menu_file;
+
+	/**
+	 * @brief Run menu
+	 */
 	QMenu *menu_run;
+
+	/**
+	 * @brief Main layout
+	 */
 	QGridLayout *grid;
+
+	/**
+	 * @brief Leftmost layout
+	 */
 	QVBoxLayout *test_layout;
+
+	/**
+	 * @brief Rightmost layout
+	 */
+	QVBoxLayout *info_layout;
+
 	QWidget *central_widget;
 
 	QTimer *timer;
