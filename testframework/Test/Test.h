@@ -1,12 +1,15 @@
 #ifndef TEST_H
 #define TEST_H
 
+#include <functional>
+#include <iostream>
+#include <tuple>
+
 #include "testframework/Generator/GeneratorList.h"
+#include "testframework/Global/mutex.h"
+#include "testframework/Socket/Client.h"
 #include "testframework/Test/TestBase.h"
 #include "testframework/testframework/TestFramework.h"
-
-#include <functional>
-#include <tuple>
 
 template <typename... T> class Test : public TestBase {
   private:
@@ -37,10 +40,15 @@ template <typename... T>
 std::function<void(Test<T...> *, bool, size_t,
 				   std::vector<std::tuple<size_t, std::string>>)>
 	Test<T...>::callback_run_one =
-		[](Test *test, bool r, size_t i,
-		   std::vector<std::tuple<size_t, std::string>> t) {
-			TestFramework::get_instance()->get_database()->add_result(
-				test->get_name(), i, r, t);
+		[](Test<T...> *t, bool r, size_t i,
+		   std::vector<std::tuple<size_t, std::string>> tuple) {
+			std::string str[SOCKET_NARGS];
+
+			for (size_t i = 0; i < tuple.size(); ++i)
+				str[i] = std::get<1>(tuple.at(i));
+
+			TestFramework::get_instance()->get_client_socket()->send(
+				t->get_id(), t->get_name(), str, i, tuple.size(), r);
 		};
 
 template <typename... T>
@@ -54,8 +62,10 @@ template <typename... T> bool Test<T...>::_run_one() {
 	bool r;
 
 #ifdef DEBUG
+	cout_mutex.lock();
 	std::cout << "[INFO]: " << this->get_name() << " running "
 			  << list->get_index() << std::endl;
+	cout_mutex.unlock();
 #endif
 	r = std::apply(this->_f, list->get_current());
 	this->callback_run_one(
@@ -73,8 +83,10 @@ template <typename... T> bool Test<T...>::_run_one() {
 
 template <typename... T> bool Test<T...>::_run_all() {
 #ifdef DEBUG
+	cout_mutex.lock();
 	std::cout << "[INFO]: running all tests for " << this->get_name()
 			  << std::endl;
+	cout_mutex.unlock();
 #endif
 
 	while (!this->is_finished())

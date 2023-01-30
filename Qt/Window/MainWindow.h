@@ -2,7 +2,11 @@
 #define MAIN_WINDOW_H
 
 #include <sys/wait.h>
+
 #include <vector>
+#include <mutex>
+#include <thread>
+#include <iostream>
 
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QListWidget>
@@ -10,9 +14,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QtWidgets>
-
-#include <mutex>
-#include <thread>
 
 #include "Qt/Widgets/TestFrameworkTest.h"
 
@@ -23,6 +24,8 @@ class MainWindow : public QMainWindow {
 	QGridLayout *grid;
 	QVBoxLayout *test_layout;
 	QWidget *central_widget;
+
+	QTimer *timer;
 
 	std::vector<TestFrameworkTest *> test_widgets;
 

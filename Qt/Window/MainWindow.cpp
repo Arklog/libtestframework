@@ -1,4 +1,6 @@
 #include "Qt/Window/MainWindow.h"
+#include "testframework/Socket/Server.h"
+#include "testframework/Socket/defines.h"
 #include "testframework/Test/TestManager.h"
 #include "testframework/testframework/TestFramework.h"
 
@@ -6,18 +8,18 @@ MainWindow::MainWindow() {
 	this->resize(600, 800);
 	this->setWindowTitle(QApplication::translate("toplevel", "TestFramework"));
 	this->test_widgets = std::vector<TestFrameworkTest *>();
+	this->timer = new QTimer();
+	connect(this->timer, &QTimer::timeout, this, &MainWindow::update_tests);
 	this->setup_widgets();
 	this->show();
 }
 
 MainWindow::~MainWindow() {
-	this->test_run_thread.join();
-
 	delete this->menu_file;
 	delete this->menu_run;
 	delete this->central_widget;
 
-	this->close();
+	TestFramework::get_instance()->stop();
 }
 
 void MainWindow::setup_widgets() {
@@ -55,26 +57,6 @@ void MainWindow::setup_widget_menu_run() {
 	action = new QAction("Run");
 	connect(action, &QAction::triggered, this, &MainWindow::run_tests);
 	this->menu_run->addAction(action);
-
-	action = new QAction("Open db");
-	connect(action, &QAction::triggered, []() {
-		char *args[] = {strdup("sqlitebrowser"),
-						strdup(TestFramework::get_instance()
-								   ->get_database()
-								   ->get_db_name()
-								   .c_str()),
-						NULL};
-
-		pid_t pid = fork();
-		if (pid)
-			return;
-		if (execvp("sqlitebrowser", args) == -1) {
-#ifdef DEBUG
-			std::cout << "[ERROR]: " << strerror(errno) << std::endl;
-#endif
-		}
-	});
-	this->menu_run->addAction(action);
 }
 
 void MainWindow::open_lib() {
@@ -100,23 +82,39 @@ void MainWindow::run_tests() {
 	TestFramework::get_instance()->get_test_manager()->execute_tests();
 #else
 	pid = TestFramework::get_instance()->get_test_manager()->fork_run();
+	if (pid == 0) {
+		TestFramework::get_instance()->stop();
+		_Exit(0);
+	}
 	this->test_run_thread = std::thread([this, pid, &status]() {
 		waitpid(pid, &status, 0);
 		std::lock_guard<std::mutex> guard(this->finished_mutex);
 		this->finished = true;
 	});
-	
-	for (auto i: this->test_widgets)
-		i->start();
+	this->timer->start(100);
 
 #ifdef DEBUG
-		if (status) {
+	if (status) {
 		std::cout << "[ERROR]: child process failed error code " << status
 				  << std::endl;
-	}
-	else {
+	} else {
 		std::cout << "[INFO]: child process finished successfully\n";
 	}
 #endif
 #endif
+}
+
+void MainWindow::update_tests() {
+	std::vector<t_socket_data> v;
+
+	this->finished_mutex.lock();
+	if (this->finished)
+	{
+		this->timer->stop();
+		this->test_run_thread.join();
+	}
+	this->finished_mutex.unlock();
+	v = TestFramework::get_instance()->get_server_socket()->get_socket_datas();
+	for (auto d : v)
+		this->test_widgets.at(d.id)->process_data(d);
 }

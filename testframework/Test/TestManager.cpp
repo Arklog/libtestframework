@@ -1,17 +1,14 @@
 #include "testframework/Test/TestManager.h"
-#include "testframework/Database/Database.h"
+#include "testframework/Socket/Client.h"
+#include "testframework/Socket/Server.h"
 #include "testframework/Test/TestBase.h"
 #include "testframework/testframework/TestFramework.h"
-
-std::function<void(TestBase *)> TestManager::callback_add_test =
-	[](TestBase *test) {
-		TestFramework::get_instance()->get_database()->add_test(test);
-	};
 
 TestManager::TestManager() : test_list(std::vector<TestBase *>()) {}
 
 TestBase *TestManager::get_next_test() {
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
+	std::lock_guard<std::mutex> cguard(cout_mutex);
 
 #ifdef DEBUG
 	std::cout << "[INFO]: getting next test\n";
@@ -30,13 +27,18 @@ TestBase *TestManager::get_next_test() {
 }
 
 TestManager::~TestManager() {
-	for (auto test : this->test_list)
+	for (TestBase *test : this->test_list)
 		delete test;
+	this->test_list.clear();
 }
 
 void TestManager::add_test(TestBase *test) {
+	std::lock_guard<std::mutex> cguard(cout_mutex);
+#ifdef DEBUG
+	std::cout << "[INFO]: adding test: " << test->get_name() << std::endl;
+#endif
+	std::lock_guard<std::mutex> guard(this->test_list_mutex);
 	this->test_list.push_back(test);
-	this->callback_add_test(test);
 }
 
 void TestManager::add_tests(std::vector<TestBase *> v) {
@@ -44,28 +46,35 @@ void TestManager::add_tests(std::vector<TestBase *> v) {
 		this->add_test(t);
 }
 
+void TestManager::sort_tests() {}
+
 void TestManager::execute_tests() {
+	TestFramework::get_instance()->get_client_socket()->connect();
 	this->test_list_iter = this->test_list.begin();
 
 	auto l = [this]() {
 		TestBase *current_test;
-
 #ifdef DEBUG
+		cout_mutex.lock();
 		std::cout << "[INFO]: starting thread\n";
+		cout_mutex.unlock();
 #endif
 
 		while ((current_test = this->get_next_test())) {
 
 #ifdef DEBUG
+			cout_mutex.lock();
 			std::cout << "[INFO]: new test started (" << current_test
 					  << std::endl;
+			cout_mutex.unlock();
 #endif
 
 			current_test->run_all();
 		}
-
 #ifdef DEBUG
+		cout_mutex.lock();
 		std::cout << "[INFO]: thread finished executing\n";
+		cout_mutex.unlock();
 #endif
 	};
 
@@ -77,7 +86,9 @@ void TestManager::execute_tests() {
 		iter->join();
 
 #ifdef DEBUG
-	std::cout << "[INFO]: all tests executed\n";
+	cout_mutex.lock();
+	std::cout << "[INFO]: tests executed\n";
+	cout_mutex.unlock();
 #endif
 }
 
@@ -85,27 +96,28 @@ pid_t TestManager::fork_run() {
 	pid_t pid;
 
 #ifdef DEBUG
+	cout_mutex.lock();
 	std::cout << "[INFO]: forking\n" << std::endl;
+	cout_mutex.unlock();
 #endif
 
 	pid = fork();
 	if (pid == 0) {
 #ifdef DEBUG
+		cout_mutex.lock();
 		std::cout << "[INFO]: in child process, executing tests\n";
+		cout_mutex.unlock();
 #endif
-
 		this->execute_tests();
 
-#ifdef DEBUG
-		std::cout << "[INFO]: tests executed\n";
-#endif
-
-		_Exit(0);
+		return 0;
 	} else {
+		TestFramework::get_instance()->get_server_socket()->loop();
 		return pid;
 	}
 }
 
-const std::vector<TestBase *> TestManager::get_tests() const {
+const std::vector<TestBase *> TestManager::get_tests() {
+	this->sort_tests();
 	return this->test_list;
 }

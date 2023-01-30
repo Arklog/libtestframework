@@ -6,9 +6,10 @@
 #include <tuple>
 #include <vector>
 
-
 class TestBase {
   private:
+	static size_t id_counter;
+	size_t id;
 	std::string testname;
 
   protected:
@@ -29,6 +30,14 @@ class TestBase {
 	bool run_all();
 
 	virtual size_t get_test_numbers() const;
+	size_t get_id() const;
+
+	/**
+	 * @brief Reset the id counter to zero, must be called before loading a new
+	 * project
+	 *
+	 */
+	static void reset_id_counter();
 };
 
 #endif

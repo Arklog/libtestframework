@@ -16,3 +16,4 @@ lib/boost_1_81_0
 libtestgui.so
 testframeworkui
 .gdb_history
+libtestframework.so

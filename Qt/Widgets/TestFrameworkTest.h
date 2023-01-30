@@ -1,10 +1,12 @@
 #ifndef TESTFRAMEWORK_TEST_H
 #define TESTFRAMEWORK_TEST_H
 
+#include "testframework/Socket/defines.h"
 #include "testframework/Test/TestBase.h"
+
+#include <qt5/QtCore/QTimer>
 #include <qt5/QtWidgets/QGridLayout>
 #include <qt5/QtWidgets/QtWidgets>
-#include <qt5/QtCore/QTimer>
 
 class TestFrameworkTest : public QWidget {
   private:
@@ -28,6 +30,8 @@ class TestFrameworkTest : public QWidget {
 
 	void start();
 	void stop();
+	void incr();
+	void process_data(t_socket_data d);
 	void update_info();
 };
 

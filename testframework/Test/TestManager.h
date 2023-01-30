@@ -1,12 +1,16 @@
 #ifndef TEST_MANAGER_H
 #define TEST_MANAGER_H
 
-#include <cstring>
 #include <array>
+#include <cstring>
 #include <functional>
 #include <mutex>
 #include <thread>
 #include <vector>
+#include <algorithm>
+#include <iostream>
+
+#include "testframework/Global/mutex.h"
 
 class TestBase;
 
@@ -26,8 +30,31 @@ class TestManager {
 	TestManager();
 	~TestManager();
 
+	/**
+	 * @brief Add a test to the test manager
+	 *
+	 * @param test the test to add
+	 */
 	void add_test(TestBase *test);
+
+	/**
+	 * @brief Add a vector of test to the test manager
+	 *
+	 * @param tests the vector of test to add
+	 */
 	void add_tests(std::vector<TestBase *> tests);
+
+	/**
+	 * @brief Sort the tests by ascending order of ids, must be called before
+	 * creating the test widgets.
+	 *
+	 */
+	void sort_tests();
+
+	/**
+	 * @brief Execute the tests in multiple threads
+	 *
+	 */
 	void execute_tests();
 
 	/**
@@ -37,7 +64,12 @@ class TestManager {
 	 */
 	pid_t fork_run();
 
-	const std::vector<TestBase *> get_tests() const;
+	/**
+	 * @brief Get the vector of tests object
+	 *
+	 * @return const std::vector<TestBase *>
+	 */
+	const std::vector<TestBase *> get_tests();
 };
 
 #endif
