@@ -44,6 +44,7 @@ class MainWindow : public QMainWindow {
 	 * @brief Rightmost layout
 	 */
 	QVBoxLayout *info_layout;
+	TestFrameworkTestInfo *test_info;
 
 	QWidget *central_widget;
 
@@ -64,10 +65,22 @@ class MainWindow : public QMainWindow {
 	MainWindow();
 	~MainWindow();
 
+	/**
+	 * @brief Action to open a library
+	 *
+	 */
 	void open_lib();
 
+	/**
+	 * @brief Action to start running tests
+	 *
+	 */
 	void run_tests();
 
+	/**
+	 * @brief Update the tests, is called periodically
+	 *
+	 */
 	void update_tests();
 };
 

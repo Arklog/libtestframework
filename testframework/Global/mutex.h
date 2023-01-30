@@ -3,6 +3,6 @@
 
 #include <mutex>
 
-inline std::mutex cout_mutex;
+extern std::mutex cout_mutex;
 
 #endif

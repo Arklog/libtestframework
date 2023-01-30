@@ -1,4 +1,5 @@
 #include "Qt/Widgets/TestFrameworkTest.h"
+#include "Qt/Widgets/TestFrameworkTestInfo.h"
 #include "testframework/testframework/TestFramework.h"
 
 TestFrameworkTest::TestFrameworkTest(QWidget *parent, const TestBase *test) {
@@ -14,6 +15,8 @@ TestFrameworkTest::TestFrameworkTest(QWidget *parent, const TestBase *test) {
 	this->layout = new QGridLayout(this);
 	this->layout->addWidget(this->label, 0, 0, 1, 1);
 	this->layout->addWidget(this->progress, 0, 1, 1, 2);
+
+	connect(this, &TestFrameworkTest::mousePressEvent, this, &TestFrameworkTest::select);
 }
 
 TestFrameworkTest::~TestFrameworkTest() {
@@ -25,12 +28,11 @@ TestFrameworkTest::~TestFrameworkTest() {
 
 std::string TestFrameworkTest::get_test_name() const { return this->testname; }
 
-void TestFrameworkTest::start() {}
-
-void TestFrameworkTest::stop() {}
-
 void TestFrameworkTest::incr() {
 	this->progress->setValue(this->progress->value() + 1);
+}
+
+void TestFrameworkTest::select() {
 }
 
 void TestFrameworkTest::process_data(t_socket_data d) {

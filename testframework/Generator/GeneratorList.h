@@ -16,8 +16,10 @@ template <typename... T> class GeneratorList {
 
 	template <size_t... I>
 	void generate_index_max(std::integer_sequence<size_t, I...>);
+
 	template <size_t... I>
 	void generate_next(std::integer_sequence<size_t, I...>);
+
 	template <size_t... I>
 	void generate_at(size_t i, std::integer_sequence<size_t, I...>);
 

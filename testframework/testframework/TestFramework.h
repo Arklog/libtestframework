@@ -29,7 +29,6 @@ class TestFramework {
 	~TestFramework();
 
 	static void set_instance(TestFramework *);
-	static TestBase *create_test_array(std::vector<TestBase *> v);
 	static TestFramework *get_instance();
 
 	/**

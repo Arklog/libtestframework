@@ -29,10 +29,29 @@ class TestFrameworkTest : public QWidget {
 
 	std::string get_test_name() const;
 
-	void start();
-	void stop();
+ /**
+  * @brief Increment the counter
+  * 
+  */
 	void incr();
+
+	/**
+	 * @brief Select this test to be displayed in the test info section
+	 * 
+	 */
+	void select();
+
+	/**
+	 * @brief Process some socket_data related to this test
+	 * 
+	 * @param d 
+	 */
 	void process_data(t_socket_data d);
+
+	/**
+	 * @brief Update the widget
+	 * 
+	 */
 	void update_info();
 };
 

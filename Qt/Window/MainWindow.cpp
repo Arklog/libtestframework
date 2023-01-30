@@ -29,7 +29,8 @@ void MainWindow::setup_widgets() {
 	this->test_layout = new QVBoxLayout();
 	this->info_layout = new QVBoxLayout();
 
-	this->info_layout->addWidget(new TestFrameworkTestInfo(0));
+	this->test_info = new TestFrameworkTestInfo();
+	this->info_layout->addWidget(this->test_info);
 
 	this->grid->addLayout(this->test_layout, 0, 0);
 	this->grid->addLayout(this->info_layout, 0, 1);
@@ -78,6 +79,8 @@ void MainWindow::open_lib() {
 		this->test_widgets.push_back(w);
 		this->test_layout->addWidget(w);
 	}
+
+	this->test_info->init();
 	this->update();
 }
 
@@ -114,13 +117,18 @@ void MainWindow::run_tests() {
 void MainWindow::update_tests() {
 	std::vector<t_socket_data> v;
 
+	// check if the tests have finished running
 	this->finished_mutex.lock();
 	if (this->finished) {
-		this->timer->stop();
-		this->test_run_thread.join();
+		this->timer->stop();		  // stop the timer
+		this->test_run_thread.join(); // join the thread
 	}
 	this->finished_mutex.unlock();
+
+	// process each test data recovered
 	v = TestFramework::get_instance()->get_server_socket()->get_socket_datas();
-	for (auto d : v)
+	for (auto d : v) {
 		this->test_widgets.at(d.id)->process_data(d);
+		this->test_info->add_test_data(d);
+	}
 }
