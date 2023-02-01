@@ -18,6 +18,8 @@ class TestFrameworkTestArg : public QWidget {
   public:
 	TestFrameworkTestArg(t_socket_data d);
     ~TestFrameworkTestArg();
+
+	bool is_error() const;
 };
 
 #endif

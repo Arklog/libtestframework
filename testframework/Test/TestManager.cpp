@@ -108,6 +108,7 @@ pid_t TestManager::fork_run() {
 		std::cout << "[INFO]: in child process, executing tests\n";
 		cout_mutex.unlock();
 #endif
+		sleep(1);
 		this->execute_tests();
 
 		return 0;

@@ -30,6 +30,7 @@ void MainWindow::setup_widgets() {
 	this->info_layout = new QVBoxLayout();
 
 	this->test_info = new TestFrameworkTestInfo();
+	TestFrameworkTest::info_ptr = this->test_info;
 	this->info_layout->addWidget(this->test_info);
 
 	this->grid->addLayout(this->test_layout, 0, 0);

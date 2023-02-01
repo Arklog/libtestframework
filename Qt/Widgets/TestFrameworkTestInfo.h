@@ -21,6 +21,8 @@ class TestFrameworkTestInfo : public QWidget {
 	std::vector<TestFrameworkTestArgList *> vec;
 
 	QVBoxLayout *layout;
+	QRadioButton *button_show_all;
+	QRadioButton *button_show_error;
 	QGroupBox *buttons;
 
 	void draw_tests_info();
