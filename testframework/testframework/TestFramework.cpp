@@ -7,7 +7,9 @@
 TestFramework *TestFramework::instance = nullptr;
 TestFramework::TestFramework()
 	: project_name(""), test_manager(nullptr), lib_loader(nullptr),
-	  server_socket(nullptr), client_socket(nullptr) {}
+	  server_socket(nullptr), client_socket(nullptr) {
+	TestBase::reset_id_counter();
+}
 
 TestFramework::~TestFramework() {
 	if (this->test_manager)
@@ -31,6 +33,7 @@ TestFramework *TestFramework::get_instance() {
 }
 
 bool TestFramework::init(std::string project_name) {
+	TestBase::reset_id_counter();
 	this->project_name = project_name;
 
 	this->test_manager = new TestManager();
@@ -50,6 +53,10 @@ void TestFramework::new_project(std::string project_name) {
 		delete this->lib_loader;
 	if (this->test_manager)
 		delete this->test_manager;
+	if (this->server_socket)
+		delete this->server_socket;
+	if (this->client_socket)
+		delete this->client_socket;
 	this->init(project_name);
 }
 

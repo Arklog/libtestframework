@@ -1,17 +1,17 @@
 #ifndef SOCKET_SERVER_H
 #define SOCKET_SERVER_H
 
+#include <sys/fcntl.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-#include <sys/fcntl.h>
 
 #include <cerrno>
 #include <iostream>
 #include <mutex>
 #include <vector>
 
+#include "testframework/Global/output.h"
 #include "testframework/Socket/defines.h"
-#include "testframework/Global/mutex.h"
 
 class SocketServer {
   private:
@@ -25,12 +25,16 @@ class SocketServer {
 	void bind();
 	void listen();
 	void add_socket_data(t_socket_data d);
+
   public:
 	SocketServer();
 	~SocketServer();
 
 	void loop();
+
 	std::vector<t_socket_data> get_socket_datas();
+
+	void clear_socket_datas();
 };
 
 #endif

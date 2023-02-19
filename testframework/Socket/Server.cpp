@@ -107,6 +107,7 @@ void SocketServer::loop() {
 			this->add_socket_data(d);
 		}
 	}
+	print_info("server loop finished");
 }
 
 std::vector<t_socket_data> SocketServer::get_socket_datas() {
@@ -114,7 +115,10 @@ std::vector<t_socket_data> SocketServer::get_socket_datas() {
 	std::lock_guard<std::mutex> guard(this->socket_datas_mutex);
 
 	v = this->socket_datas;
-	this->socket_datas.erase(this->socket_datas.begin(),
-							 this->socket_datas.end());
 	return v;
+}
+
+void SocketServer::clear_socket_datas() { 
+	std::lock_guard<std::mutex> guard(this->socket_datas_mutex);
+	socket_datas.clear();
 }

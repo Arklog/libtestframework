@@ -3,25 +3,19 @@
 #include "testframework/Socket/Server.h"
 #include "testframework/Test/TestBase.h"
 #include "testframework/testframework/TestFramework.h"
+#include "testframework/Global/output.h"
 
 TestManager::TestManager() : test_list(std::vector<TestBase *>()) {}
 
 TestBase *TestManager::get_next_test() {
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
-	std::lock_guard<std::mutex> cguard(cout_mutex);
 
-#ifdef DEBUG
-	std::cout << "[INFO]: getting next test\n";
-#endif
+	print_info("getting next test");
 	if (this->test_list_iter == this->test_list.end()) {
-#ifdef DEBUG
-		std::cout << "[INFO]: no test available\n";
-#endif
+		print_info("no test available");
 		return nullptr;
 	} else {
-#ifdef DEBUG
-		std::cout << "[INFO]: next test found\n";
-#endif
+		print_info("next test found");
 		return *(this->test_list_iter++);
 	}
 }
@@ -33,11 +27,8 @@ TestManager::~TestManager() {
 }
 
 void TestManager::add_test(TestBase *test) {
-	std::lock_guard<std::mutex> cguard(cout_mutex);
-#ifdef DEBUG
-	std::cout << "[INFO]: adding test: " << test->get_name() << std::endl;
-#endif
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
+	print_info("adding test ", test->get_name());
 	this->test_list.push_back(test);
 }
 
@@ -54,28 +45,13 @@ void TestManager::execute_tests() {
 
 	auto l = [this]() {
 		TestBase *current_test;
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[INFO]: starting thread\n";
-		cout_mutex.unlock();
-#endif
+		print_info("starting thread");
 
 		while ((current_test = this->get_next_test())) {
-
-#ifdef DEBUG
-			cout_mutex.lock();
-			std::cout << "[INFO]: new test started (" << current_test
-					  << std::endl;
-			cout_mutex.unlock();
-#endif
-
+			print_info("new test started: ", current_test);
 			current_test->run_all();
 		}
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[INFO]: thread finished executing\n";
-		cout_mutex.unlock();
-#endif
+		print_info("thread finished executing");
 	};
 
 	for (std::array<std::thread, 4>::iterator iter = this->thead_list.begin();
@@ -85,29 +61,17 @@ void TestManager::execute_tests() {
 		 iter != this->thead_list.end(); ++iter)
 		iter->join();
 
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: tests executed\n";
-	cout_mutex.unlock();
-#endif
+	print_info("tests executed");
 }
 
 pid_t TestManager::fork_run() {
 	pid_t pid;
 
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: forking\n" << std::endl;
-	cout_mutex.unlock();
-#endif
+	print_info("forking");
 
 	pid = fork();
 	if (pid == 0) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[INFO]: in child process, executing tests\n";
-		cout_mutex.unlock();
-#endif
+		print_info("in child process, executing tests");
 		sleep(1);
 		this->execute_tests();
 

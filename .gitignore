@@ -17,3 +17,5 @@ libtestgui.so
 testframeworkui
 .gdb_history
 libtestframework.so
+install_manifest.txt
+.idea

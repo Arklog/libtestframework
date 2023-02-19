@@ -1,9 +1,6 @@
 #ifndef TESTFRAMEWORK_H
 #define TESTFRAMEWORK_H
 
-#define TESTFRAMEWORK_VERSION_MAJOR 0
-#define TESTFRAMEWORK_VERSION_MINOR 0
-
 #include <string>
 #include <vector>
 
@@ -12,6 +9,9 @@ class TestManager;
 class LibLoader;
 class SocketServer;
 class SocketClient;
+
+const int LIBTESTFRAMEWORK_VERSION_MAJOR = 0;
+const int LIBTESTFRAMEWORK_VERSION_MINOR = 0;
 
 class TestFramework {
   private:
