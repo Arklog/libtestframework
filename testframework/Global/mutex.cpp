@@ -1,3 +1,3 @@
-#include "testframework/Global/mutex.h"
+#include "Global/mutex.h"
 
 std::mutex cout_mutex{};

@@ -1,7 +1,7 @@
 #ifndef GENERATOR_LIST_H
 #define GENERATOR_LIST_H
 
-#include "testframework/Generator/Generator.h"
+#include "Generator/Generator.h"
 #include <tuple>
 
 template <typename... T> class GeneratorList {

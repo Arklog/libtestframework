@@ -1,9 +1,9 @@
-#include "testframework/Test/TestManager.h"
-#include "testframework/Socket/Client.h"
-#include "testframework/Socket/Server.h"
-#include "testframework/Test/TestBase.h"
-#include "testframework/testframework/TestFramework.h"
-#include "testframework/Global/output.h"
+#include "Test/TestManager.h"
+#include "Global/output.h"
+#include "Socket/Client.h"
+#include "Socket/Server.h"
+#include "Test/TestBase.h"
+#include "testframework/TestFramework.h"
 
 TestManager::TestManager() : test_list(std::vector<TestBase *>()) {}
 

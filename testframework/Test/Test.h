@@ -5,11 +5,11 @@
 #include <iostream>
 #include <tuple>
 
-#include "testframework/Generator/GeneratorList.h"
-#include "testframework/Global/mutex.h"
-#include "testframework/Socket/Client.h"
-#include "testframework/Test/TestBase.h"
-#include "testframework/testframework/TestFramework.h"
+#include "Generator/GeneratorList.h"
+#include "Global/mutex.h"
+#include "Socket/Client.h"
+#include "Test/TestBase.h"
+#include "testframework/TestFramework.h"
 
 template <typename... T> class Test : public TestBase {
   private:

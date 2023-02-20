@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-#include "testframework/Test/TestBase.h"
+#include "Test/TestBase.h"
 
 class TestFramework;
 

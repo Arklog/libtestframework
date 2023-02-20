@@ -1,10 +1,15 @@
-#include "testframework/testframework/TestFramework.h"
-#include "testframework/Loader/LibLoader.h"
-#include "testframework/Socket/Client.h"
-#include "testframework/Socket/Server.h"
-#include "testframework/Test/TestManager.h"
+#include "testframework/TestFramework.h"
+#include "Loader/LibLoader.h"
+#include "Socket/Client.h"
+#include "Socket/Server.h"
+#include "Test/TestBase.h"
+#include "Test/TestManager.h"
 
 TestFramework *TestFramework::instance = nullptr;
+std::function<void(TestBase *)> TestFramework::test_added_callback = nullptr;
+std::function<void(t_socket_data)> TestFramework::data_received_callback =
+	nullptr;
+
 TestFramework::TestFramework()
 	: project_name(""), test_manager(nullptr), lib_loader(nullptr),
 	  server_socket(nullptr), client_socket(nullptr) {
@@ -71,3 +76,13 @@ TestManager *TestFramework::get_test_manager() { return this->test_manager; }
 SocketServer *TestFramework::get_server_socket() { return this->server_socket; }
 
 SocketClient *TestFramework::get_client_socket() { return this->client_socket; }
+
+void TestFramework::setDataReceivedCallback(
+	const std::function<void(t_socket_data)> &dataReceivedCallback) {
+	data_received_callback = dataReceivedCallback;
+}
+
+void TestFramework::setTestAddedCallback(
+	const std::function<void(TestBase *)> &testAddedCallback) {
+	test_added_callback = testAddedCallback;
+}

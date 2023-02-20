@@ -1,9 +1,9 @@
 #ifndef TEST_BUILDER_H
 #define TEST_BUILDER_H
 
-#include "testframework/Generator/GeneratorBuilder.h"
-#include "testframework/Test/Test.h"
-#include "testframework/Test/TestBase.h"
+#include "Generator/GeneratorBuilder.h"
+#include "Test/Test.h"
+#include "Test/TestBase.h"
 
 namespace TestBuilder {
 template <typename... T>

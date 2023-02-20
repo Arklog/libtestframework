@@ -1,4 +1,4 @@
-#include "testframework/Socket/Server.h"
+#include "Socket/Server.h"
 
 SocketServer::SocketServer() : sock_fd(0) {
 	memset(&addr, 0, sizeof(this->addr));
@@ -10,12 +10,7 @@ SocketServer::~SocketServer() {}
 void SocketServer::create() {
 	sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
 	if (sock_fd == -1) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[ERROR]: could not create socket: " << strerror(errno)
-				  << std::endl;
-		cout_mutex.unlock();
-#endif
+		print_error("could not create socket:", strerror(errno));
 		exit(1);
 	}
 }
@@ -28,12 +23,7 @@ void SocketServer::bind() {
 	ret = ::bind(this->sock_fd, (const struct sockaddr *)&this->addr,
 				 sizeof(this->addr));
 	if (ret == -1) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[ERROR]: could not bind socket: " << strerror(errno)
-				  << std::endl;
-		cout_mutex.unlock();
-#endif
+		print_error("could not bind socket:", strerror(errno));
 		exit(1);
 	}
 }
@@ -43,10 +33,7 @@ void SocketServer::listen() {
 
 	ret = ::listen(this->sock_fd, 0);
 	if (ret == -1) {
-#ifdef DEBUG
-		std::cout << "[ERROR]: failed to listen: " << strerror(errno)
-				  << std::endl;
-#endif
+		print_error("could not listen:", strerror(errno));
 		exit(1);
 	}
 }
@@ -67,43 +54,21 @@ void SocketServer::loop() {
 
 	fd = accept(this->sock_fd, NULL, NULL);
 	if (fd == -1) {
-#ifdef DEBUG
-		std::cout << "[ERROR]: failed to accept connection: " << strerror(errno)
-				  << std::endl;
-#endif
+		print_error("failed to accept connection:", strerror(errno));
 		exit(1);
 	} else {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[INFO]: server: connection accepted\n";
-		cout_mutex.unlock();
-#endif
+		print_info("connection accepted");
 	}
 
 	while ((n = recv(fd, &d, sizeof(d), 0))) {
 		if (n == -1) {
-#ifdef DEBUG
-			cout_mutex.lock();
-			std::cout << "[ERROR]: failed to recv datas: " << strerror(errno)
-					  << std::endl;
-			cout_mutex.unlock();
-#endif
+			print_error("failed to recv datas:", strerror(errno));
 			exit(1);
 		} else if (n != sizeof(d)) {
-#ifdef DEBUG
-			cout_mutex.lock();
-			std::cout << "[ERROR]: received " << n
-					  << "bytes of data instead of " << sizeof(d) << std::endl;
-			cout_mutex.unlock();
-#endif
+			print_error("received", n, "bytes of data instead of", sizeof(d));
 			return;
 		} else {
-#ifdef DEBUG
-			cout_mutex.lock();
-			std::cout << "[INFO]: received datas for " << d.testname
-					  << " number " << d.index << std::endl;
-			cout_mutex.unlock();
-#endif
+			print_info("received data for", d.testname, "number", d.index);
 			this->add_socket_data(d);
 		}
 	}
@@ -118,7 +83,7 @@ std::vector<t_socket_data> SocketServer::get_socket_datas() {
 	return v;
 }
 
-void SocketServer::clear_socket_datas() { 
+void SocketServer::clear_socket_datas() {
 	std::lock_guard<std::mutex> guard(this->socket_datas_mutex);
 	socket_datas.clear();
 }

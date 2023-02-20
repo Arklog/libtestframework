@@ -1,6 +1,8 @@
 #ifndef TESTFRAMEWORK_H
 #define TESTFRAMEWORK_H
 
+#include "Socket/defines.h"
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -25,12 +27,14 @@ class TestFramework {
 	static TestFramework *instance;
 	TestFramework();
 
+	static std::function<void(TestBase *)> test_added_callback;
+	static std::function<void(t_socket_data)> data_received_callback;
+
   public:
 	~TestFramework();
-
 	static void set_instance(TestFramework *);
-	static TestFramework *get_instance();
 
+	static TestFramework *get_instance();
 	/**
 	 * @brief Initialise the framework
 	 *
@@ -48,13 +52,21 @@ class TestFramework {
 	 */
 	void stop();
 
-	std::string get_project_name() const;
+	[[nodiscard]] std::string get_project_name() const;
 
 	TestManager *get_test_manager();
 
 	SocketServer *get_server_socket();
 
 	SocketClient *get_client_socket();
+
+	static void setDataReceivedCallback(
+		const std::function<void(t_socket_data)> &dataReceivedCallback);
+
+	static std::function<void(t_socket_data)> getDataReceivedCallback();
+
+	static void setTestAddedCallback(
+		const std::function<void(TestBase *)> &testAddedCallback);
 };
 
 #endif

@@ -9,9 +9,11 @@
 #include <iostream>
 #include <mutex>
 #include <vector>
+#include <thread>
+#include <functional>
 
-#include "testframework/Global/output.h"
-#include "testframework/Socket/defines.h"
+#include "Global/output.h"
+#include "Socket/defines.h"
 
 class SocketServer {
   private:
@@ -20,6 +22,8 @@ class SocketServer {
 
 	std::mutex socket_datas_mutex;
 	std::vector<t_socket_data> socket_datas;
+
+	std::thread th;
 
 	void create();
 	void bind();
@@ -30,11 +34,17 @@ class SocketServer {
 	SocketServer();
 	~SocketServer();
 
+	/**
+	 * @brief Main loop
+	 * 
+	 */
 	void loop();
 
 	std::vector<t_socket_data> get_socket_datas();
 
 	void clear_socket_datas();
+
+	void start();
 };
 
 #endif

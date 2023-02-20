@@ -1,6 +1,6 @@
-#include "testframework/Loader/LibLoader.h"
-#include "testframework/Test/TestManager.h"
-#include "testframework/testframework/TestFramework.h"
+#include "Loader/LibLoader.h"
+#include "Test/TestManager.h"
+#include "testframework/TestFramework.h"
 
 LibLoader::LibLoader() : handle(nullptr), f(nullptr) {}
 

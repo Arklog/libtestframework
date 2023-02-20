@@ -1,4 +1,4 @@
-#include "testframework/Generator/GeneratorBuilder.h"
+#include "Generator/GeneratorBuilder.h"
 #include <cstdio>
 #include <string>
 

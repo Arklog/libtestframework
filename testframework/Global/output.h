@@ -2,12 +2,12 @@
 #define OUTPUT_H
 
 #include <iostream>
-#include "testframework/Global/mutex.h"
+#include "Global/mutex.h"
 
 template <typename... T>
 void _print(T... args)
 {
-	((std::cout << " " << args), ...);
+	((std::cout << " " << args << " "), ...);
 }
 
 template <typename... T>

@@ -10,8 +10,9 @@
 #include <mutex>
 #include <string>
 
-#include "testframework/Socket/defines.h"
-#include "testframework/Global/mutex.h"
+#include "Socket/defines.h"
+#include "Global/mutex.h"
+#include "Global/output.h"
 
 class SocketClient {
   private:

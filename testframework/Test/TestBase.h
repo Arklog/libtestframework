@@ -1,6 +1,7 @@
 #ifndef TEST_BASE_H
 #define TEST_BASE_H
 
+#include "Socket/defines.h"
 #include <functional>
 #include <string>
 #include <tuple>
@@ -11,6 +12,13 @@ class TestBase {
 	static size_t id_counter;
 	size_t id;
 	std::string testname;
+
+	/**
+	 * @brief callback function to call after a new test result have been
+	 * received
+	 *
+	 */
+	std::function<void(t_socket_data)> callback;
 
   protected:
 	bool result;
