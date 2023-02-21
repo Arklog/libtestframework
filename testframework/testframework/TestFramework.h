@@ -1,7 +1,7 @@
 #ifndef TESTFRAMEWORK_H
 #define TESTFRAMEWORK_H
 
-#include "Socket/defines.h"
+#include "testframework/Socket/defines.h"
 #include <functional>
 #include <string>
 #include <vector>
@@ -27,24 +27,26 @@ class TestFramework {
 	static TestFramework *instance;
 	TestFramework();
 
-	static std::function<void(TestBase *)> test_added_callback;
-	static std::function<void(t_socket_data)> data_received_callback;
-
   public:
 	~TestFramework();
 	static void set_instance(TestFramework *);
-
 	static TestFramework *get_instance();
+
 	/**
 	 * @brief Initialise the framework
 	 *
-	 * @param project_name the name of the current project
+	 * @param _project_name the name of the current project
 	 *
 	 * @return 1 on success, 0 else
 	 */
-	bool init(std::string project_name);
+	bool init(std::string _project_name);
 
-	void new_project(std::string project_name);
+	/**
+	 * @brief Setup the framework again for a new series of tests
+	 *
+	 * @param _project_name the name of the test library to load
+	 */
+	[[maybe_unused]] void new_project(std::string _project_name);
 
 	/**
 	 * @brief Stop the framework and clear memory
@@ -60,12 +62,34 @@ class TestFramework {
 
 	SocketClient *get_client_socket();
 
-	static void setDataReceivedCallback(
+	/**
+	 * Contain a callback called when a new test is added to the framework
+	 */
+	static std::function<void(TestBase *)> test_added_callback;
+
+	/**
+	 * Contain a callback called when the server receive the result for a test
+	 */
+	static std::function<void(t_socket_data)> data_received_callback;
+
+	/**
+	 * getter for data_received callback
+	 * @return
+	 */
+	[[maybe_unused]] static const std::function<void(t_socket_data)> &
+	getDataReceivedCallback();
+
+	/**
+	 * getter for test_added_callback
+	 * @return
+	 */
+	[[maybe_unused]] static const std::function<void(TestBase *)> &
+	getTestAddedCallback();
+
+	[[maybe_unused]] static void setDataReceivedCallback(
 		const std::function<void(t_socket_data)> &dataReceivedCallback);
 
-	static std::function<void(t_socket_data)> getDataReceivedCallback();
-
-	static void setTestAddedCallback(
+	[[maybe_unused]] static void setTestAddedCallback(
 		const std::function<void(TestBase *)> &testAddedCallback);
 };
 

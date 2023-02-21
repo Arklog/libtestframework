@@ -1,7 +1,7 @@
-#include "Generator/GeneratorBuilder.h"
-#include "Test/TestBuilder.h"
-#include "Test/TestManager.h"
-#include "testframework/TestFramework.h"
+#include "testframework/Generator/GeneratorBuilder.h"
+#include "testframework/Test/TestBuilder.h"
+#include "testframework/Test/TestManager.h"
+#include "testframework/testframework/TestFramework.h"
 
 #include <cctype>
 

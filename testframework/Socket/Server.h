@@ -6,14 +6,14 @@
 #include <sys/un.h>
 
 #include <cerrno>
+#include <functional>
 #include <iostream>
 #include <mutex>
-#include <vector>
 #include <thread>
-#include <functional>
+#include <vector>
 
-#include "Global/output.h"
-#include "Socket/defines.h"
+#include "testframework/Global/output.h"
+#include "testframework/Socket/defines.h"
 
 class SocketServer {
   private:
@@ -36,7 +36,7 @@ class SocketServer {
 
 	/**
 	 * @brief Main loop
-	 * 
+	 *
 	 */
 	void loop();
 

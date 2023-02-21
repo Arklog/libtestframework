@@ -5,11 +5,11 @@
 #include <iostream>
 #include <tuple>
 
-#include "Generator/GeneratorList.h"
-#include "Global/mutex.h"
-#include "Socket/Client.h"
-#include "Test/TestBase.h"
-#include "testframework/TestFramework.h"
+#include "testframework/Generator/GeneratorList.h"
+#include "testframework/Global/mutex.h"
+#include "testframework/Socket/Client.h"
+#include "testframework/Test/TestBase.h"
+#include "testframework/testframework/TestFramework.h"
 
 template <typename... T> class Test : public TestBase {
   private:
@@ -25,15 +25,15 @@ template <typename... T> class Test : public TestBase {
 		_gen_db_args(std::tuple<T...>, std::integer_sequence<size_t, I...>);
 
   protected:
-	virtual bool _run_one() override;
-	virtual bool _run_all() override;
+	bool _run_one() override;
+	bool _run_all() override;
 
   public:
 	Test(std::string name, std::function<bool(T...)> f,
 		 GeneratorList<T...> *list);
-	~Test();
+	~Test() override;
 
-	virtual size_t get_test_numbers() const override;
+	[[nodiscard]] size_t get_test_numbers() const override;
 };
 
 template <typename... T>
@@ -44,8 +44,8 @@ std::function<void(Test<T...> *, bool, size_t,
 		   std::vector<std::tuple<size_t, std::string>> tuple) {
 			std::string str[SOCKET_NARGS];
 
-			for (size_t i = 0; i < tuple.size(); ++i)
-				str[i] = std::get<1>(tuple.at(i));
+			for (size_t iter = 0; iter < tuple.size(); ++iter)
+				str[iter] = std::get<1>(tuple.at(iter));
 
 			TestFramework::get_instance()->get_client_socket()->send(
 				t->get_id(), t->get_name(), str, i, tuple.size(), r);

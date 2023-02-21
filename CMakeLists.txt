@@ -8,17 +8,17 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_EXPORT_COMPILE_COMMANDS false)
 
-add_compile_options(-g -I./testframework -fPIC -DDEBUG)
+add_compile_options(-g -I. -fPIC -DDEBUG)
 
-file(GLOB SRC testframework/**/*.cpp)
+file(GLOB SRC source/**/*.cpp)
 file(GLOB HEADERS testframework/**/*.h)
 
 # testframework library
-add_library(testframework SHARED ${SRC} ${HEADERS})
+add_library(testframework SHARED ${SRC})
 target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
 
 install(TARGETS testframework DESTINATION /usr/lib)
-install(FILES ${HEADERS} DESTINATION /usr/include/testframework)
+install(DIRECTORY "./testframework" TYPE INCLUDE)
 
 # tests for the generator class
 add_executable(testgenerator tests/generator.cpp)

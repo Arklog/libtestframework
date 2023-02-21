@@ -1,7 +1,7 @@
 #ifndef GENERATOR_RANGE_H
 #define GENERATOR_RANGE_H
 
-#include "Generator.h"
+#include "testframework/Generator/Generator.h"
 #include <vector>
 
 template <typename T> class GeneratorArray : public Generator<T> {
@@ -12,20 +12,18 @@ template <typename T> class GeneratorArray : public Generator<T> {
 	GeneratorArray(std::vector<T> elements);
 	~GeneratorArray();
 
-	virtual void generate_next() override;
-	virtual void generate_at(size_t i) override;
-	virtual void reset() override;
+	void generate_next() override;
+	void generate_at(size_t i) override;
+	void reset() override;
 };
 
 template <typename T>
 GeneratorArray<T>::GeneratorArray(std::vector<T> elements)
 	: Generator<T>(elements.at(0), elements.size() - 1), vec(elements) {}
 
-template <typename T> GeneratorArray<T>::~GeneratorArray() {}
+template <typename T> GeneratorArray<T>::~GeneratorArray() = default;
 
-template <typename T>
-void GeneratorArray<T>::generate_next()
-{
+template <typename T> void GeneratorArray<T>::generate_next() {
 	if (this->get_index() == this->get_index_max())
 		return;
 	this->value_current = this->vec.at(++this->index_current);
@@ -33,9 +31,7 @@ void GeneratorArray<T>::generate_next()
 		this->finished = true;
 }
 
-template <typename T>
-void GeneratorArray<T>::generate_at(size_t i)
-{
+template <typename T> void GeneratorArray<T>::generate_at(size_t i) {
 	if (i > this->get_index_max())
 		return;
 	this->index_current = i;

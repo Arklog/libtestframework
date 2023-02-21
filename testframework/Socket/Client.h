@@ -10,9 +10,9 @@
 #include <mutex>
 #include <string>
 
-#include "Socket/defines.h"
-#include "Global/mutex.h"
-#include "Global/output.h"
+#include "testframework/Global/mutex.h"
+#include "testframework/Global/output.h"
+#include "testframework/Socket/defines.h"
 
 class SocketClient {
   private:
@@ -21,7 +21,6 @@ class SocketClient {
 	sockaddr_un addr;
 
 	bool initialized;
-
 
   public:
 	SocketClient();

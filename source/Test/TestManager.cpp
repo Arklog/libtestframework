@@ -1,9 +1,9 @@
-#include "Test/TestManager.h"
-#include "Global/output.h"
-#include "Socket/Client.h"
-#include "Socket/Server.h"
-#include "Test/TestBase.h"
-#include "testframework/TestFramework.h"
+#include "testframework/Test/TestManager.h"
+#include "testframework/Global/output.h"
+#include "testframework/Socket/Client.h"
+#include "testframework/Socket/Server.h"
+#include "testframework/Test/TestBase.h"
+#include "testframework/testframework/TestFramework.h"
 
 TestManager::TestManager() : test_list(std::vector<TestBase *>()) {}
 
@@ -30,6 +30,9 @@ void TestManager::add_test(TestBase *test) {
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
 	print_info("adding test ", test->get_name());
 	this->test_list.push_back(test);
+	auto callback = TestFramework::getTestAddedCallback();
+	if (callback)
+		callback(test);
 }
 
 void TestManager::add_tests(std::vector<TestBase *> v) {
