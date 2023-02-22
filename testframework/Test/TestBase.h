@@ -13,13 +13,6 @@ class TestBase {
 	size_t id;
 	std::string testname;
 
-	/**
-	 * @brief callback function to call after a new test result have been
-	 * received
-	 *
-	 */
-	std::function<void(t_socket_data)> callback;
-
   protected:
 	bool result;
 	bool finished;
@@ -33,11 +26,30 @@ class TestBase {
 
 	std::string get_name() const;
 
+	/**
+	 * Check if this test is finished
+	 * @return
+	 */
 	bool is_finished() const;
+
+	/**
+	 * Run one test
+	 * @return
+	 */
 	bool run_one();
+
+	/**
+	 * Run all tests
+	 * @return
+	 */
 	bool run_all();
 
+	/**
+	 * Return the total number of subtests to be run
+	 * @return
+	 */
 	virtual size_t get_test_numbers() const;
+
 	size_t get_id() const;
 
 	/**

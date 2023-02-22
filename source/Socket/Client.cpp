@@ -8,19 +8,12 @@ SocketClient::~SocketClient() {}
 void SocketClient::connect() {
 	int r;
 
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: client: connecting to server\n";
-	cout_mutex.unlock();
-#endif
+	print_info("client connecting to server");
 
 	std::lock_guard<std::mutex> guard(sock_fd_mutex);
 	sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
 	if (sock_fd == -1) {
-#ifdef DEBUG
-		std::cout << "[ERROR]: error creating socket: " << strerror(errno)
-				  << std::endl;
-#endif
+		print_error("error creating socket:", strerror(errno));
 		return;
 	}
 
@@ -32,19 +25,11 @@ void SocketClient::connect() {
 				  sizeof(this->addr) - 1);
 
 	if (r == -1) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[ERROR]: could not connect socket: " << strerror(errno)
-				  << std::endl;
-		cout_mutex.unlock();
-#endif
+		print_error("client could not connect to server socket:",
+					strerror(errno));
 		return;
 	} else {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[INFO]: client: connected to server\n";
-		cout_mutex.unlock();
-#endif
+		print_info("client connected to server");
 		initialized = true;
 	}
 }
@@ -56,37 +41,18 @@ void SocketClient::send(t_socket_data d) {
 		this->connect();
 	std::lock_guard<std::mutex> guard(this->sock_fd_mutex);
 
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: client: sending datas to server\n";
-	cout_mutex.unlock();
-#endif
+	print_info("client sending data to server");
 
 	r = ::send(this->sock_fd, &d, sizeof(d), 0);
 
 	if (r == -1) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[ERROR]: error sending data to server: "
-				  << strerror(errno) << std::endl;
-		cout_mutex.unlock();
-#endif
+		print_error("client:", strerror(errno));
 		_Exit(1);
 	} else if (sizeof(d) != r) {
-#ifdef DEBUG
-		cout_mutex.lock();
-		std::cout << "[ERROR]: send " << r << " bytes of datas instead of "
-				  << sizeof(d) << std::endl;
-		cout_mutex.unlock();
-#endif
+		print_error("client: sent", r, "bytes of data instead of", sizeof(d));
 		_Exit(1);
 	}
-
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: client: datas sent to server\n";
-	cout_mutex.unlock();
-#endif
+	print_info("client: data successfully send");
 }
 
 void SocketClient::send(size_t id, std::string testname, std::string *args,

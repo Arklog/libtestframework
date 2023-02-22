@@ -1,11 +1,19 @@
 #include "testframework/Socket/Server.h"
+#include "testframework/testframework/TestFramework.h"
 
-SocketServer::SocketServer() : sock_fd(0) {
+SocketServer::SocketServer() : sock_fd(0), finished(false) {
 	memset(&addr, 0, sizeof(this->addr));
 	addr.sun_family = AF_UNIX;
 }
 
-SocketServer::~SocketServer() {}
+SocketServer::~SocketServer() {
+	try {
+		th.join();
+	} catch (std::exception &e) {
+		print_error("error joining thread", e.what());
+	}
+	close(sock_fd);
+}
 
 void SocketServer::create() {
 	sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -44,35 +52,37 @@ void SocketServer::add_socket_data(t_socket_data d) {
 }
 
 void SocketServer::loop() {
-	int fd;
-	t_socket_data d;
-	int n;
-
 	this->create();
 	this->bind();
 	this->listen();
 
-	fd = accept(this->sock_fd, NULL, NULL);
-	if (fd == -1) {
+	connection_fd = accept(this->sock_fd, NULL, NULL);
+	if (connection_fd == -1) {
 		print_error("failed to accept connection:", strerror(errno));
 		exit(1);
 	} else {
 		print_info("connection accepted");
 	}
 
-	while ((n = recv(fd, &d, sizeof(d), 0))) {
-		if (n == -1) {
-			print_error("failed to recv datas:", strerror(errno));
-			exit(1);
-		} else if (n != sizeof(d)) {
-			print_error("received", n, "bytes of data instead of", sizeof(d));
-			return;
-		} else {
-			print_info("received data for", d.testname, "number", d.index);
-			this->add_socket_data(d);
+	th = std::thread([this]() {
+		while ((this->nreceived =
+					recv(this->connection_fd, &this->d, sizeof(this->d), 0))) {
+			if (this->nreceived == -1) {
+				print_error("failed to recv datas:", strerror(errno));
+				exit(1);
+			} else if (this->nreceived != sizeof(d)) {
+				print_error("received", this->nreceived,
+							"bytes of data instead of", sizeof(d));
+				return;
+			} else {
+				print_info("received data for", this->d.testname, "number",
+						   this->d.index);
+				this->add_socket_data(this->d);
+			}
 		}
-	}
-	print_info("server loop finished");
+		close(this->connection_fd);
+		this->finished = true;
+	});
 }
 
 std::vector<t_socket_data> SocketServer::get_socket_datas() {
@@ -87,3 +97,5 @@ void SocketServer::clear_socket_datas() {
 	std::lock_guard<std::mutex> guard(this->socket_datas_mutex);
 	socket_datas.clear();
 }
+
+bool SocketServer::isFinished() const { return finished; }

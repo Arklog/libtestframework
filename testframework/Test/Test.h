@@ -16,6 +16,10 @@ template <typename... T> class Test : public TestBase {
 	std::function<bool(T...)> _f;
 	GeneratorList<T...> *list;
 
+	/**
+	 * Called when a test have been run, by default send test result to the
+	 * server using the client
+	 */
 	static std::function<void(Test<T...> *, bool, size_t,
 							  std::vector<std::tuple<size_t, std::string>>)>
 		callback_run_one;
@@ -61,19 +65,14 @@ template <typename... T> Test<T...>::~Test() { delete this->list; }
 template <typename... T> bool Test<T...>::_run_one() {
 	bool r;
 
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: " << this->get_name() << " running "
-			  << list->get_index() << std::endl;
-	cout_mutex.unlock();
-#endif
+	print_info(get_name(), "running", list->get_index());
+
 	r = std::apply(this->_f, list->get_current());
-	this->callback_run_one(
-		this, r, this->list->get_index(),
-		this->_gen_db_args(
-			this->list->get_current(),
-			std::make_index_sequence<
-				std::tuple_size_v<decltype(this->list->get_current())>>{}));
+	auto args =
+		_gen_db_args(list->get_current(),
+					 std::make_index_sequence<
+						 std::tuple_size_v<decltype(list->get_current())>>{});
+	this->callback_run_one(this, r, this->list->get_index(), args);
 	if (!list->is_finished())
 		list->get_next();
 	else
@@ -82,12 +81,7 @@ template <typename... T> bool Test<T...>::_run_one() {
 }
 
 template <typename... T> bool Test<T...>::_run_all() {
-#ifdef DEBUG
-	cout_mutex.lock();
-	std::cout << "[INFO]: running all tests for " << this->get_name()
-			  << std::endl;
-	cout_mutex.unlock();
-#endif
+	print_info("running all tests for:", get_name());
 
 	while (!this->is_finished())
 		this->run_one();
@@ -100,6 +94,7 @@ std::vector<std::tuple<size_t, std::string>>
 Test<T...>::_gen_db_args(std::tuple<T...> t,
 						 std::integer_sequence<size_t, I...>) {
 	std::vector<std::tuple<size_t, std::string>> vec;
+
 	((vec.push_back(std::make_tuple(I, std::to_string(std::get<I>(t))))), ...);
 	return vec;
 }

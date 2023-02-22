@@ -5,6 +5,10 @@
 #define SOCKET_BUFF_SIZE 256
 #endif
 
+#ifndef SOCKET_MESSAGE_BUFF_SIZE
+#define SOCKET_MESSAGE_BUFF_SIZE 512
+#endif
+
 #ifndef SOCKET_NARGS
 #define SOCKET_NARGS 5
 #endif
@@ -19,9 +23,11 @@ typedef struct s_socket_data {
 	size_t id;
 	char testname[SOCKET_BUFF_SIZE];
 	char args[SOCKET_NARGS][SOCKET_BUFF_SIZE];
+	char message[SOCKET_MESSAGE_BUFF_SIZE];
 	int index;
 	int nargs;
 	bool result;
+	bool crashed;
 } t_socket_data;
 
 #endif

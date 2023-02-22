@@ -10,7 +10,7 @@ extern "C" void testframework_setup_tests(TestFramework *framework) {
 	std::vector<TestBase *> v;
 
 	std::vector<int> t;
-	for (int i = 0; i <= 0xffff; ++i)
+	for (int i = 0; i <= 0xf; ++i)
 		t.push_back(i);
 
 	if (!framework)

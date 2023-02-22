@@ -1,9 +1,11 @@
-#include "testframework/testframework/TestFramework.h"
+#include <utility>
+
 #include "testframework/Loader/LibLoader.h"
 #include "testframework/Socket/Client.h"
 #include "testframework/Socket/Server.h"
 #include "testframework/Test/TestBase.h"
 #include "testframework/Test/TestManager.h"
+#include "testframework/testframework/TestFramework.h"
 
 TestFramework *TestFramework::instance = nullptr;
 
@@ -35,7 +37,7 @@ TestFramework *TestFramework::get_instance() {
 	return TestFramework::instance;
 }
 
-bool TestFramework::init(std::string _project_name) {
+bool TestFramework::init(const std::string &_project_name) {
 	TestBase::reset_id_counter();
 	this->project_name = _project_name;
 
@@ -71,22 +73,31 @@ SocketServer *TestFramework::get_server_socket() { return this->server_socket; }
 
 SocketClient *TestFramework::get_client_socket() { return this->client_socket; }
 
-[[maybe_unused]] void TestFramework::setDataReceivedCallback(
+void TestFramework::setDataReceivedCallback(
 	const std::function<void(t_socket_data)> &dataReceivedCallback) {
 	data_received_callback = dataReceivedCallback;
 }
 
-[[maybe_unused]] void TestFramework::setTestAddedCallback(
+void TestFramework::setTestAddedCallback(
 	const std::function<void(TestBase *)> &testAddedCallback) {
 	test_added_callback = testAddedCallback;
 }
 
-[[maybe_unused]] const std::function<void(TestBase *)> &
-TestFramework::getTestAddedCallback() {
+const std::function<void(TestBase *)> &TestFramework::getTestAddedCallback() {
 	return test_added_callback;
 }
 
-[[maybe_unused]] const std::function<void(t_socket_data)> &
+const std::function<void(t_socket_data)> &
 TestFramework::getDataReceivedCallback() {
 	return data_received_callback;
+}
+
+void TestFramework::start() {
+	this->th = ThreadWrapper(
+		[]() {
+			TestFramework *instance = TestFramework::get_instance();
+			instance->get_test_manager()->fork_run();
+			instance->stop();
+		},
+		"TestFrameworkMainThread");
 }

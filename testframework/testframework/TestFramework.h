@@ -2,8 +2,10 @@
 #define TESTFRAMEWORK_H
 
 #include "testframework/Socket/defines.h"
+#include "testframework/utils/ThreadWrapper.h"
 #include <functional>
 #include <string>
+#include <thread>
 #include <vector>
 
 class TestBase;
@@ -18,7 +20,7 @@ const int LIBTESTFRAMEWORK_VERSION_MINOR = 0;
 class TestFramework {
   private:
 	std::string project_name;
-
+	ThreadWrapper th;
 	TestManager *test_manager;
 	LibLoader *lib_loader;
 	SocketServer *server_socket;
@@ -39,7 +41,7 @@ class TestFramework {
 	 *
 	 * @return 1 on success, 0 else
 	 */
-	bool init(std::string _project_name);
+	bool init(const std::string &_project_name);
 
 	/**
 	 * @brief Setup the framework again for a new series of tests
@@ -52,7 +54,9 @@ class TestFramework {
 	 * @brief Stop the framework and clear memory
 	 *
 	 */
-	void stop();
+	static void stop();
+
+	void start();
 
 	[[nodiscard]] std::string get_project_name() const;
 
@@ -76,20 +80,18 @@ class TestFramework {
 	 * getter for data_received callback
 	 * @return
 	 */
-	[[maybe_unused]] static const std::function<void(t_socket_data)> &
-	getDataReceivedCallback();
+	static const std::function<void(t_socket_data)> &getDataReceivedCallback();
 
 	/**
 	 * getter for test_added_callback
 	 * @return
 	 */
-	[[maybe_unused]] static const std::function<void(TestBase *)> &
-	getTestAddedCallback();
+	static const std::function<void(TestBase *)> &getTestAddedCallback();
 
-	[[maybe_unused]] static void setDataReceivedCallback(
+	static void setDataReceivedCallback(
 		const std::function<void(t_socket_data)> &dataReceivedCallback);
 
-	[[maybe_unused]] static void setTestAddedCallback(
+	static void setTestAddedCallback(
 		const std::function<void(TestBase *)> &testAddedCallback);
 };
 

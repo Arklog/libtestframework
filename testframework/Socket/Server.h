@@ -18,8 +18,17 @@
 class SocketServer {
   private:
 	int sock_fd;
+	int connection_fd;
+	ssize_t nreceived;
+	t_socket_data d;
 	sockaddr_un addr;
 
+	bool finished;
+
+  public:
+	bool isFinished() const;
+
+  private:
 	std::mutex socket_datas_mutex;
 	std::vector<t_socket_data> socket_datas;
 
@@ -43,8 +52,6 @@ class SocketServer {
 	std::vector<t_socket_data> get_socket_datas();
 
 	void clear_socket_datas();
-
-	void start();
 };
 
 #endif

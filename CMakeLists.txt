@@ -17,7 +17,7 @@ file(GLOB HEADERS testframework/**/*.h)
 add_library(testframework SHARED ${SRC})
 target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
 
-install(TARGETS testframework DESTINATION /usr/lib)
+install(TARGETS testframework)
 install(DIRECTORY "./testframework" TYPE INCLUDE)
 
 # tests for the generator class
