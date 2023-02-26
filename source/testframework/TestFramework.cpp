@@ -1,3 +1,4 @@
+#include <sys/wait.h>
 #include <utility>
 
 #include "testframework/Loader/LibLoader.h"
@@ -9,18 +10,21 @@
 
 TestFramework *TestFramework::instance = nullptr;
 
-std::function<void(TestBase *)> TestFramework::test_added_callback = nullptr;
+std::function<void(std::shared_ptr<TestBase>)>
+	TestFramework::test_added_callback = nullptr;
 
 std::function<void(t_socket_data)> TestFramework::data_received_callback =
 	nullptr;
 
 TestFramework::TestFramework()
-	: project_name(), test_manager(nullptr), lib_loader(nullptr),
-	  server_socket(nullptr), client_socket(nullptr) {
+	: project_name(), th(), test_manager(nullptr), lib_loader(nullptr),
+	  server_socket(nullptr), client_socket(nullptr), _should_stop(false) {
+	print_info("TestFramework: initializing instance");
 	TestBase::reset_id_counter();
 }
 
 TestFramework::~TestFramework() {
+	print_info("TestFramework: killing current instance");
 	delete this->test_manager;
 	delete this->lib_loader;
 	delete this->server_socket;
@@ -38,6 +42,7 @@ TestFramework *TestFramework::get_instance() {
 }
 
 bool TestFramework::init(const std::string &_project_name) {
+	print_info("TestFramework: initializing project", _project_name);
 	TestBase::reset_id_counter();
 	this->project_name = _project_name;
 
@@ -50,18 +55,19 @@ bool TestFramework::init(const std::string &_project_name) {
 	this->server_socket = new SocketServer();
 	this->client_socket = new SocketClient();
 
+	_should_stop = false;
+
 	return true;
 }
 
 [[maybe_unused]] void TestFramework::new_project(std::string _project_name) {
+	print_info("TestFramework: preparing for project", _project_name);
 	delete this->lib_loader;
 	delete this->test_manager;
 	delete this->server_socket;
 	delete this->client_socket;
 	this->init(_project_name);
 }
-
-[[maybe_unused]] void TestFramework::stop() { delete TestFramework::instance; }
 
 [[maybe_unused]] std::string TestFramework::get_project_name() const {
 	return this->project_name;
@@ -79,11 +85,12 @@ void TestFramework::setDataReceivedCallback(
 }
 
 void TestFramework::setTestAddedCallback(
-	const std::function<void(TestBase *)> &testAddedCallback) {
+	const std::function<void(std::shared_ptr<TestBase>)> &testAddedCallback) {
 	test_added_callback = testAddedCallback;
 }
 
-const std::function<void(TestBase *)> &TestFramework::getTestAddedCallback() {
+const std::function<void(std::shared_ptr<TestBase>)> &
+TestFramework::getTestAddedCallback() {
 	return test_added_callback;
 }
 
@@ -93,11 +100,23 @@ TestFramework::getDataReceivedCallback() {
 }
 
 void TestFramework::start() {
-	this->th = ThreadWrapper(
-		[]() {
-			TestFramework *instance = TestFramework::get_instance();
-			instance->get_test_manager()->fork_run();
-			instance->stop();
-		},
-		"TestFrameworkMainThread");
+	print_info("TestFramework: start execution");
+	this->th.newThread(std::function<void()>([]() {
+						   print_info("MainThread: start");
+						   auto instance = TestFramework::get_instance();
+						   pid_t pid = instance->get_test_manager()->fork_run();
+
+						   waitpid(pid, nullptr, 0);
+						   instance->setShouldStop(true);
+						   print_info("TestManager: finished");
+					   }),
+					   "MainThread");
 }
+
+bool TestFramework::isShouldStop() const { return _should_stop; }
+
+void TestFramework::setShouldStop(bool shouldStop) {
+	_should_stop = shouldStop;
+}
+
+void TestFramework::stop() { delete TestFramework::instance; }

@@ -6,6 +6,7 @@
 #define LIBTESTFRAMEWORK_THREADWRAPPER_H
 
 #include <functional>
+#include <pthread.h>
 #include <string>
 #include <thread>
 
@@ -14,6 +15,11 @@
 class ThreadWrapper {
   private:
 	std::thread th;
+	std::function<void()> l;
+
+	void updateName();
+
+  private:
 	std::string name;
 
   public:
@@ -21,7 +27,9 @@ class ThreadWrapper {
 	explicit ThreadWrapper(std::function<void()> l, std::string name = "");
 	~ThreadWrapper();
 
-	ThreadWrapper &operator=(ThreadWrapper a);
+	void newThread(std::function<void()> _l, std::string _name = "");
+
+	void join();
 };
 
 #endif // LIBTESTFRAMEWORK_THREADWRAPPER_H

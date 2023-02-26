@@ -16,6 +16,7 @@ file(GLOB HEADERS testframework/**/*.h)
 # testframework library
 add_library(testframework SHARED ${SRC})
 target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
+target_link_libraries(testframework pthread)
 
 install(TARGETS testframework)
 install(DIRECTORY "./testframework" TYPE INCLUDE)
@@ -29,3 +30,8 @@ target_link_libraries(testgenerator testframework)
 add_library(testgui SHARED tests/gui.cpp)
 add_dependencies(testgui testframework)
 target_link_libraries(testgui testframework)
+
+#test for ThreadWrapper
+add_executable(testthread tests/thread.cpp)
+add_dependencies(testthread testframework)
+target_link_libraries(testthread testframework)

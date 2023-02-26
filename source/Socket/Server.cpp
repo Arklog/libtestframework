@@ -6,14 +6,7 @@ SocketServer::SocketServer() : sock_fd(0), finished(false) {
 	addr.sun_family = AF_UNIX;
 }
 
-SocketServer::~SocketServer() {
-	try {
-		th.join();
-	} catch (std::exception &e) {
-		print_error("error joining thread", e.what());
-	}
-	close(sock_fd);
-}
+SocketServer::~SocketServer() { close(sock_fd); }
 
 void SocketServer::create() {
 	sock_fd = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -64,25 +57,27 @@ void SocketServer::loop() {
 		print_info("connection accepted");
 	}
 
-	th = std::thread([this]() {
-		while ((this->nreceived =
-					recv(this->connection_fd, &this->d, sizeof(this->d), 0))) {
-			if (this->nreceived == -1) {
-				print_error("failed to recv datas:", strerror(errno));
-				exit(1);
-			} else if (this->nreceived != sizeof(d)) {
-				print_error("received", this->nreceived,
-							"bytes of data instead of", sizeof(d));
-				return;
-			} else {
-				print_info("received data for", this->d.testname, "number",
-						   this->d.index);
-				this->add_socket_data(this->d);
+	th.newThread(
+		[this]() {
+			while ((this->nreceived = recv(this->connection_fd, &this->d,
+										   sizeof(this->d), 0))) {
+				if (this->nreceived == -1) {
+					print_error("failed to recv datas:", strerror(errno));
+					exit(1);
+				} else if (this->nreceived != sizeof(d)) {
+					print_error("received", this->nreceived,
+								"bytes of data instead of", sizeof(d));
+					return;
+				} else {
+					print_info("received data for", this->d.testname, "number",
+							   this->d.index);
+					this->add_socket_data(this->d);
+				}
 			}
-		}
-		close(this->connection_fd);
-		this->finished = true;
-	});
+			close(this->connection_fd);
+			this->finished = true;
+		},
+		"ServerThread");
 }
 
 std::vector<t_socket_data> SocketServer::get_socket_datas() {

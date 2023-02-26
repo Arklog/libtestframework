@@ -14,6 +14,7 @@
 
 #include "testframework/Global/output.h"
 #include "testframework/Socket/defines.h"
+#include "testframework/utils/ThreadWrapper.h"
 
 class SocketServer {
   private:
@@ -32,7 +33,7 @@ class SocketServer {
 	std::mutex socket_datas_mutex;
 	std::vector<t_socket_data> socket_datas;
 
-	std::thread th;
+	ThreadWrapper th;
 
 	void create();
 	void bind();

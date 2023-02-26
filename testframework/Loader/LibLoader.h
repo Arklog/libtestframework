@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+#include "testframework/Global/output.h"
 #include "testframework/Test/TestBase.h"
 
 class TestFramework;

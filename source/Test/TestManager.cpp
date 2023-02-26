@@ -5,28 +5,25 @@
 #include "testframework/Test/TestBase.h"
 #include "testframework/testframework/TestFramework.h"
 
-TestManager::TestManager() : test_list(std::vector<TestBase *>()) {}
+TestManager::TestManager()
+	: test_list(std::vector<std::shared_ptr<TestBase>>()) {}
 
-TestBase *TestManager::get_next_test() {
+std::shared_ptr<TestBase> TestManager::get_next_test() {
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
 
 	print_info("getting next test");
-	if (this->test_list_iter == this->test_list.end()) {
-		print_info("no test available");
-		return nullptr;
+	if (this->test_list_iter != test_list.end()) {
+		print_info("TestManager: test found");
+		return *(test_list_iter++);
 	} else {
-		print_info("next test found");
-		return *(this->test_list_iter++);
+		print_info("TestManager: no test found");
+		return (nullptr);
 	}
 }
 
-TestManager::~TestManager() {
-	for (TestBase *test : this->test_list)
-		delete test;
-	this->test_list.clear();
-}
+TestManager::~TestManager() { this->test_list.clear(); }
 
-void TestManager::add_test(TestBase *test) {
+void TestManager::add_test(std::shared_ptr<TestBase> test) {
 	std::lock_guard<std::mutex> guard(this->test_list_mutex);
 	print_info("adding test ", test->get_name());
 	this->test_list.push_back(test);
@@ -35,7 +32,7 @@ void TestManager::add_test(TestBase *test) {
 		callback(test);
 }
 
-void TestManager::add_tests(std::vector<TestBase *> v) {
+void TestManager::add_tests(std::vector<std::shared_ptr<TestBase>> v) {
 	for (auto t : v)
 		this->add_test(t);
 }
@@ -44,48 +41,47 @@ void TestManager::sort_tests() {}
 
 void TestManager::execute_tests() {
 	TestFramework::get_instance()->get_client_socket()->connect();
-	this->test_list_iter = this->test_list.begin();
+	std::array<std::thread, 4> thread_list{};
 
+	test_list_iter = test_list.begin();
 	auto l = [this]() {
-		TestBase *current_test;
-		print_info("starting thread");
+		std::shared_ptr<TestBase> current_test;
 
 		while ((current_test = this->get_next_test())) {
-			print_info("new test started: ", current_test);
+			print_info("new test started: ", current_test->get_name());
 			current_test->run_all();
 		}
-		print_info("thread finished executing");
 	};
 
-	for (std::array<std::thread, 4>::iterator iter = this->thead_list.begin();
-		 iter != this->thead_list.end(); ++iter)
+	for (auto iter = thread_list.begin(); iter != thread_list.end(); ++iter)
 		*iter = std::thread(l);
-	for (std::array<std::thread, 4>::iterator iter = this->thead_list.begin();
-		 iter != this->thead_list.end(); ++iter)
+	for (auto iter = thread_list.begin(); iter != thread_list.end(); ++iter)
 		iter->join();
-
-	print_info("tests executed");
+	print_info("TestManager: finished running tests");
 }
 
 pid_t TestManager::fork_run() {
 	pid_t pid;
 
-	print_info("forking");
+	print_info("TestManager: forking");
 
 	pid = fork();
 	if (pid == 0) {
-		print_info("in child process, executing tests");
+		print_info("TestManager: in child process, executing tests");
 		sleep(1);
 		this->execute_tests();
 
 		return 0;
 	} else {
+		print_info("TestManager: starting server");
 		TestFramework::get_instance()->get_server_socket()->loop();
 		return pid;
 	}
 }
 
-const std::vector<TestBase *> TestManager::get_tests() {
+std::vector<std::shared_ptr<TestBase>> TestManager::get_tests() {
+	std::lock_guard<std::mutex> guard(test_list_mutex);
+
 	this->sort_tests();
-	return this->test_list;
+	return test_list;
 }

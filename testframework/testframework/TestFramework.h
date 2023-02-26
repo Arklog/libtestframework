@@ -4,7 +4,9 @@
 #include "testframework/Socket/defines.h"
 #include "testframework/utils/ThreadWrapper.h"
 #include <functional>
+#include <memory>
 #include <string>
+#include <sys/wait.h>
 #include <thread>
 #include <vector>
 
@@ -26,6 +28,13 @@ class TestFramework {
 	SocketServer *server_socket;
 	SocketClient *client_socket;
 
+	bool _should_stop;
+
+  public:
+	bool isShouldStop() const;
+	void setShouldStop(bool shouldStop);
+
+  private:
 	static TestFramework *instance;
 	TestFramework();
 
@@ -50,12 +59,6 @@ class TestFramework {
 	 */
 	[[maybe_unused]] void new_project(std::string _project_name);
 
-	/**
-	 * @brief Stop the framework and clear memory
-	 *
-	 */
-	static void stop();
-
 	void start();
 
 	[[nodiscard]] std::string get_project_name() const;
@@ -69,7 +72,7 @@ class TestFramework {
 	/**
 	 * Contain a callback called when a new test is added to the framework
 	 */
-	static std::function<void(TestBase *)> test_added_callback;
+	static std::function<void(std::shared_ptr<TestBase>)> test_added_callback;
 
 	/**
 	 * Contain a callback called when the server receive the result for a test
@@ -86,13 +89,17 @@ class TestFramework {
 	 * getter for test_added_callback
 	 * @return
 	 */
-	static const std::function<void(TestBase *)> &getTestAddedCallback();
+	static const std::function<void(std::shared_ptr<TestBase>)> &
+	getTestAddedCallback();
 
 	static void setDataReceivedCallback(
 		const std::function<void(t_socket_data)> &dataReceivedCallback);
 
-	static void setTestAddedCallback(
-		const std::function<void(TestBase *)> &testAddedCallback);
+	static void
+	setTestAddedCallback(const std::function<void(std::shared_ptr<TestBase>)>
+							 &testAddedCallback);
+
+	static void stop();
 };
 
 #endif

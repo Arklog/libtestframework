@@ -7,10 +7,10 @@
 
 extern "C" void testframework_setup_tests(TestFramework *framework) {
 	TestManager *manager;
-	std::vector<TestBase *> v;
+	std::vector<std::shared_ptr<TestBase>> v;
 
 	std::vector<int> t;
-	for (int i = 0; i <= 0xf; ++i)
+	for (int i = 0; i <= 0xff; ++i)
 		t.push_back(i);
 
 	if (!framework)
