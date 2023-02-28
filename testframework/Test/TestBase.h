@@ -16,6 +16,7 @@ class TestBase {
   protected:
 	bool result;
 	bool finished;
+	struct s_socket_data socket_data;
 
 	virtual bool _run_one() = 0;
 	virtual bool _run_all() = 0;
@@ -39,6 +40,11 @@ class TestBase {
 	bool run_one();
 
 	/**
+	 * Jump one test
+	 */
+	virtual void jump() = 0;
+
+	/**
 	 * Run all tests
 	 * @return
 	 */
@@ -58,6 +64,8 @@ class TestBase {
 	 *
 	 */
 	static void reset_id_counter();
+
+	const struct s_socket_data &getSocketData() const;
 };
 
 #endif

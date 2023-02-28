@@ -38,22 +38,20 @@ template <typename... T> class Test : public TestBase {
 	~Test() override;
 
 	[[nodiscard]] size_t get_test_numbers() const override;
+
+	void jump() override;
 };
 
 template <typename... T>
 std::function<void(Test<T...> *, bool, size_t,
 				   std::vector<std::tuple<size_t, std::string>>)>
-	Test<T...>::callback_run_one =
-		[](Test<T...> *t, bool r, size_t i,
-		   std::vector<std::tuple<size_t, std::string>> tuple) {
-			std::string str[SOCKET_NARGS];
-
-			for (size_t iter = 0; iter < tuple.size(); ++iter)
-				str[iter] = std::get<1>(tuple.at(iter));
-
-			TestFramework::get_instance()->get_client_socket()->send(
-				t->get_id(), t->get_name(), str, i, tuple.size(), r);
-		};
+	Test<T...>::callback_run_one = nullptr;
+template <typename... T> void Test<T...>::jump() {
+	if (!this->list->is_finished())
+		this->list->get_next();
+	else
+		this->finished = true;
+}
 
 template <typename... T>
 Test<T...>::Test(std::string name, std::function<bool(T...)> f,
@@ -72,7 +70,7 @@ template <typename... T> bool Test<T...>::_run_one() {
 		_gen_db_args(list->get_current(),
 					 std::make_index_sequence<
 						 std::tuple_size_v<decltype(list->get_current())>>{});
-	this->callback_run_one(this, r, this->list->get_index(), args);
+	this->socket_data = t_socket_data(this, this->list->get_index(), r, args);
 	if (!list->is_finished())
 		list->get_next();
 	else

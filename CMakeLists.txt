@@ -15,7 +15,7 @@ file(GLOB HEADERS testframework/**/*.h)
 
 # testframework library
 add_library(testframework SHARED ${SRC})
-target_compile_options(testframework PRIVATE -Wall -Wextra -Werror)
+target_compile_options(testframework PRIVATE -Wall -Wextra)
 target_link_libraries(testframework pthread)
 
 install(TARGETS testframework)

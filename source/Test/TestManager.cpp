@@ -41,22 +41,40 @@ void TestManager::sort_tests() {}
 
 void TestManager::execute_tests() {
 	TestFramework::get_instance()->get_client_socket()->connect();
-	std::array<std::thread, 4> thread_list{};
+	std::array<ThreadWrapper, 4> thread_list{};
 
 	test_list_iter = test_list.begin();
 	auto l = [this]() {
 		std::shared_ptr<TestBase> current_test;
+		SharedMemory<t_socket_data> shared_mem;
 
 		while ((current_test = this->get_next_test())) {
 			print_info("new test started: ", current_test->get_name());
-			current_test->run_all();
+			// execute until finished
+			while (!current_test->is_finished()) {
+				Fork(
+					[&shared_mem, &current_test]() {
+						current_test->run_one();
+						shared_mem.set(current_test->getSocketData());
+						_Exit(0);
+					},
+					[]() {}, []() {},
+					[&shared_mem, &current_test](int sig) {
+						shared_mem.set(t_socket_data(sig));
+					},
+					[&shared_mem, &current_test]() {
+						current_test->jump();
+						TestFramework::get_instance()
+							->get_client_socket()
+							->send(*shared_mem.get());
+					});
+			}
 		}
 	};
 
 	for (auto iter = thread_list.begin(); iter != thread_list.end(); ++iter)
-		*iter = std::thread(l);
-	for (auto iter = thread_list.begin(); iter != thread_list.end(); ++iter)
-		iter->join();
+		iter->newThread(l, "TestThread" + std::to_string(std::distance(
+											  iter, thread_list.end())));
 	print_info("TestManager: finished running tests");
 }
 

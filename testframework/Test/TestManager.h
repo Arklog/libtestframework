@@ -12,6 +12,9 @@
 #include <vector>
 
 #include "testframework/Global/mutex.h"
+#include "testframework/Socket/Client.h"
+#include "testframework/utils/Fork.h"
+#include "testframework/utils/SharedMemory.h"
 #include "testframework/utils/ThreadWrapper.h"
 
 class TestBase;

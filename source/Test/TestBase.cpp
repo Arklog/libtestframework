@@ -5,8 +5,8 @@ size_t TestBase::id_counter = 0;
 void TestBase::reset_id_counter() { TestBase::id_counter = 0; }
 
 TestBase::TestBase(std::string name)
-	: id(TestBase::id_counter++), testname(name), result(true),
-	  finished(false) {}
+	: id(TestBase::id_counter++), testname(name), result(true), finished(false),
+	  socket_data() {}
 
 TestBase::~TestBase() {}
 
@@ -21,3 +21,4 @@ bool TestBase::run_all() { return this->_run_all(); }
 size_t TestBase::get_test_numbers() const { return 1; }
 
 size_t TestBase::get_id() const { return this->id; }
+const t_socket_data &TestBase::getSocketData() const { return socket_data; }
