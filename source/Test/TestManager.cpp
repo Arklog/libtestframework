@@ -33,7 +33,7 @@ void TestManager::add_test(std::shared_ptr<TestBase> test) {
 }
 
 void TestManager::add_tests(std::vector<std::shared_ptr<TestBase>> v) {
-	for (auto t : v)
+	for (auto &t : v)
 		this->add_test(t);
 }
 
@@ -59,14 +59,14 @@ void TestManager::execute_tests() {
 						_Exit(0);
 					},
 					[]() {}, []() {},
-					[&shared_mem, &current_test](int sig) {
+					[&shared_mem](int sig) {
 						shared_mem.set(t_socket_data(sig));
 					},
 					[&shared_mem, &current_test]() {
 						current_test->jump();
 						TestFramework::get_instance()
 							->get_client_socket()
-							->send(*shared_mem.get());
+							->send(shared_mem.get());
 					});
 			}
 		}
