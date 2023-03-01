@@ -55,18 +55,16 @@ void TestManager::execute_tests() {
 				Fork(
 					[&shared_mem, &current_test]() {
 						current_test->run_one();
-						shared_mem.set(current_test->getSocketData());
+						shared_mem = current_test->getSocketData();
 						_Exit(0);
 					},
 					[]() {}, []() {},
-					[&shared_mem](int sig) {
-						shared_mem.set(t_socket_data(sig));
-					},
+					[&shared_mem](int sig) { shared_mem = t_socket_data(sig); },
 					[&shared_mem, &current_test]() {
 						current_test->jump();
 						TestFramework::get_instance()
 							->get_client_socket()
-							->send(shared_mem.get());
+							->send(shared_mem);
 					});
 			}
 		}

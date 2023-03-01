@@ -12,19 +12,29 @@
 #include <sys/shm.h>
 
 template <typename T> class SharedMemory {
-  private:
-	std::binary_semaphore shsemaphore;
-	T *shared_memory;
-	int id;
-
   public:
 	SharedMemory();
 	~SharedMemory();
 
 	T get();
-
 	void set(T val);
+
+	operator T();
+	SharedMemory<T> &operator=(const T &);
+
+  private:
+	std::binary_semaphore shsemaphore;
+	T *shared_memory;
+	int id;
 };
+
+template <typename T>
+SharedMemory<T> &SharedMemory<T>::operator=(const T &val) {
+	*shared_memory = val;
+	return *this;
+}
+
+template <typename T> SharedMemory<T>::operator T() { return *shared_memory; }
 
 template <typename T> void SharedMemory<T>::set(T val) {
 	shsemaphore.acquire();
